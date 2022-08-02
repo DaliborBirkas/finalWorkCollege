@@ -8,16 +8,18 @@ use Symfony\Component\HttpKernel\Log\Logger;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Flex\Response;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\Json;
 
 
 class SecurityController extends AbstractController
 {
 
-    #[Route('/login', name: 'app_login',methods: 'POST')]
+    #[Route('/login', name: 'app_login')]
     public function login(Request $request,LoggerInterface $logger,
-                          IriConverterInterface $iriConverter,AuthenticationUtils $authenticationUtils){
+                          IriConverterInterface $iriConverter,AuthenticationUtils $authenticationUtils):JsonResponse{
 
         $user = $this->getUser();
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -34,8 +36,14 @@ class SecurityController extends AbstractController
                 'Location'=>$iriConverter->getIriFromItem($this->getUser()),
                 'req'=>$request->getContent(),
                 'lastusername'=>$authenticationUtils->getLastUsername()
-                ]
+            ]
         );
+//
+//        return $this->render('security/login.html.twig', [
+//            'error' => $authenticationUtils->getLastAuthenticationError(),
+//          //  'ime'=>$this->getUser()->getUserIdentifier(),
+//            'last_username' => $authenticationUtils->getLastUsername()
+//        ]);
 
     }
     #[Route('/logout',name: 'app_logout')]
