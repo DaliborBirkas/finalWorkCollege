@@ -29,16 +29,16 @@ class UserController extends AbstractController
 //                'status'=>'not created'
 //            ]);
 //        }
-        try {
-            $data = $this->createService->createUser(json_decode($request->getContent()));
-        }
-        catch (\Exception $exception){
-            dd($exception);
-        }
 
+        $data = $this->createService->createUser(json_decode($request->getContent()));
+
+        return $this->json($data);
+    }
+    #[Route('/user/verify_email', name: 'app_user_verify_email')]
+    public function verifiyEmail(Request $request): JsonResponse
+    {
         return $this->json([
-            'status'=> $data
-        ]);
-
+            'status'=>'jasam'
+            ]);
     }
 }
