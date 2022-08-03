@@ -10,8 +10,13 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
 
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -30,9 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['users_showAll'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(type:'string',length: 180, unique: true)]
     #[Groups(['users_showAll','user:write','user:read'])]
-    #[NotBlank]
+    #[Email]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -50,6 +55,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['users_showAll','user:write','user:read'])]
     #[ORM\Column(length: 255)]
     #[NotBlank]
+    #[Type('string')]
     private ?string $name = null;
 
     #[Groups(['users_showAll','user:write','user:read'])]
@@ -72,9 +78,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[NotBlank]
     private ?string $address = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer', unique: true)]
     #[Groups(['users_showAll','user:write','user:read'])]
     #[NotBlank]
+
     private ?int $pib = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
@@ -84,6 +91,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ApiSubresource]
     #[Valid]
     private ?City $city = null;
+
+    #[ORM\Column]
+    private ?bool $is_verified = null;
 
 
     public function getId(): ?int
@@ -240,6 +250,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCity(?City $city): self
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function isIsVerified(): ?bool
+    {
+        return $this->is_verified;
+    }
+
+    public function setIsVerified(bool $is_verified): self
+    {
+        $this->is_verified = $is_verified;
 
         return $this;
     }

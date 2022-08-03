@@ -28,16 +28,14 @@ security:
             stateless: true
             jwt: ~
 
-
-
-
-
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
             provider: app_user_provider
+            entry_point: App\Security\AuthenticationEntryPoint
+
 
             #custom_authenticator: App\Security\LoginFormAuthenticator
 
@@ -59,6 +57,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/login, roles: PUBLIC_ACCESS  }
+#        -  { path: ^home, roles: ROLE_USER  }
+        - { path: ^/user/create, role: PUBLIC_ACCESS}
         #- { path: ^/api, roles: IS_AUTHENTICATED_FULLY  }
 
 when@test:
