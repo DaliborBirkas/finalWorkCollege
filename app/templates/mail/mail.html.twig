@@ -7,7 +7,7 @@
             <div class="col">
         <div class="header text-center">
             <a href="{{ url('app_home') }}">
-                <img src="{{ absolute_url(asset('build/images/koza.jpg')) }}" class="logo" alt="Picture">
+                <img src="{{ absolute_url(asset('build/images/koza.jpg')) }}" width="200px" height="200px" class="logo" alt="Picture">
             </a>
         </div>
             </div>
@@ -16,11 +16,16 @@
             <h1 class="text-center">Postovani {{ name }},</h1>
             <p class="block">
 
-                Uspesno ste se registrovali na sajt<strong>Kozne galenterije</strong>.
-                Nadamo se da cemo u buducnosti ostvaritisa vama saradnju.<br>
+                Uspesno ste se registrovali na sajt <strong>Kozne galenterije</strong>.
+                Nadamo se da cemo u buducnosti ostvariti saradnju.<br><br>
                 Da bi ste bili u mogucnosti da porucujete potrebno je da verifikujete vasu
-                email adresu klikom na link ispod ovog teksta.
-                <a href="{{ url('app_user_verify_email')  }}"> {{ url('app_user_verify_email')}}</a>
+                email adresu klikom na tekst (KLIKNI ME) ispod ovog teksta.<b>↓</b><br>
+                <a href="{{ url('app_user_verify_email',{ 'email': emailAddress, 'expires': expires })}} ">KLIKNI ME</a>
+                <br>
+
+                <h4>Kozna galenterija</h4>
+                <h4>Dalibor</h4>
+                <h4>+38564655456</h4>
             </p>
         </div>
     </div>

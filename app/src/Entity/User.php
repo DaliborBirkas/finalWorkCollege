@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -73,7 +74,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[NotBlank]
     private ?string $phoneNumber = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Groups(['users_showAll','user:write','user:read'])]
     #[NotBlank]
     private ?string $address = null;
@@ -94,6 +95,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $is_verified = null;
+
+    #[ORM\Column]
+    private ?bool $isEmailVerified = null;
+
+
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $dateOfCreation = null;
+
+    #[ORM\Column]
+    private ?int $verificationExpire = null;
+
 
 
     public function getId(): ?int
@@ -265,6 +278,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function isIsEmailVerified(): ?bool
+    {
+        return $this->isEmailVerified;
+    }
+
+    public function setIsEmailVerified(bool $isEmailVerified): self
+    {
+        $this->isEmailVerified = $isEmailVerified;
+
+        return $this;
+    }
+
+
+
+    public function getDateOfCreation(): ?\DateTimeInterface
+    {
+        return $this->dateOfCreation;
+    }
+
+    public function setDateOfCreation(\DateTimeInterface $dateOfCreation): self
+    {
+        $this->dateOfCreation = $dateOfCreation;
+
+        return $this;
+    }
+
+    public function getVerificationExpire(): ?int
+    {
+        return $this->verificationExpire;
+    }
+
+    public function setVerificationExpire(int $verificationExpire): self
+    {
+        $this->verificationExpire = $verificationExpire;
+
+        return $this;
+    }
+
+
+
 
 
 

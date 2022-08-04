@@ -34,13 +34,20 @@ class CreateService
 //        $city = $data->city;
 //        $password = $data->password;
          //   $repeatedPassword = "";
+
+        date_default_timezone_set("Europe/Belgrade");
+        $date = new \DateTime();
+        $date->format('Y-m-d');
+        // 30 min to verifiy email from registration
+        $timeInt = strtotime(date('Y-m-d H:i:s'))+ 1800;
+       // dd(date('Y-m-d H:i:s'));
         $errors = [];
         $name = "dsad";
-        $email = "dbir2k34as332331@gmail.com";
+        $email = "dju33k32a@gmail.com";
         $surname = "perica";
         $companyName = "kompanija";
-        $address = "Pera Perova 2";
-        $pib = 12312343;
+        $address = "Per4a P21ero4va2 24";
+        $pib = 452114;
         $cityINT = 3;
         $password = "taraba";
         $repeatedPassword = "taraba";
@@ -96,6 +103,9 @@ class CreateService
             $user->setCity($cityString);
             $user->setPhoneNumber('+394565456545');
             $user->setIsVerified(false);
+            $user->setIsEmailVerified(false);
+            $user->setVerificationExpire($timeInt);
+            $user->setDateOfCreation($date);
             $this->em->persist($user);
             $this->em->flush();
             $errors['status'] = 'Created';
@@ -105,7 +115,7 @@ class CreateService
             }
         }
         if ($errors['status']='Created'){
-            $this->mailerService->createEmail($email,$name);
+            $this->mailerService->createEmail($email,$name,$timeInt);
         }
         return $errors;
 

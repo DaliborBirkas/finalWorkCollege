@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<body>
+<div class="body">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="header text-center">
+                    <a href="{{ url('app_home') }}">
+                        <img src="{{ absolute_url(asset('build/images/koza.jpg')) }}" width="200px" height="200px" class="logo" alt="Picture">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <h1 class="text-center">Postovani {{ name }},</h1>
+            <p class="block">
+
+                Uspesno ste se verifikovali vas nalog sa email adresom {{ emailAddress}} na sajtu <strong>Kozne galenterije</strong>.
+                <br>
+                Ukoliko zelite da direktno udjete na nas sajt klikne na (KLIKNI ME) ispod ovog teksta.<b>↓</b><br>
+                <a href="{{ url('app_home'}}">KLIKNI ME</a>
+                <br>
+
+            <h4>Kozna galenterija</h4>
+            <h4>Dalibor</h4>
+            <h4>+38564655456</h4>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

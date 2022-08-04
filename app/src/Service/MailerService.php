@@ -9,13 +9,13 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
-class MailerService
+class MailerService extends AbstractController
 {
     public function __construct(private readonly MailerInterface $mailer)
     {
 
     }
-    public function createEmail($to,$name){
+    public function createEmail($to,$name,$expires){
         $email = (new TemplatedEmail())
             ->to($to)
             //->cc('cc@example.com')
@@ -25,10 +25,14 @@ class MailerService
             ->subject('Uspesna registracija')
             ->htmlTemplate('mail/mail.html.twig')
             ->context([
-                'name'=>$name
+                'name'=>$name,
+                'emailAddress'=>$to,
+                'expires'=>$expires
             ]);
         $this->mailer->send($email);
     }
+
+
 
 
 }
