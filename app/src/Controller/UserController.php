@@ -34,10 +34,11 @@ class UserController extends AbstractController
 //                'status'=>'not created'
 //            ]);
 //        }
-
         $data = $this->createService->createUser(json_decode($request->getContent()));
 
-        return $this->json($data);
+        return $this->json([
+            'status'=>$data
+        ]);
     }
     #[Route('/user/verify_email/{email}/{expires}', name: 'app_user_verify_email')]
     public function verifiyEmail(Request $request)
@@ -62,7 +63,7 @@ class UserController extends AbstractController
                     ");
         $this->mailer->send($email);
         return $this->json([
-            'status'=> $verification
+            'status'=>'Verification done'
         ]);
 
     }
@@ -82,7 +83,7 @@ class UserController extends AbstractController
                     ");
         $this->mailer->send($email);
         return $this->json([
-            'status'=>$verification
+            'status'=>'User already verified'
         ]);
     }
     if ($verification == "could not verify email"){
@@ -102,7 +103,12 @@ class UserController extends AbstractController
                     ");
         $this->mailer->send($email);
         return $this->json([
-            'status'=>$verification
+            'status'=>'Error doctrine'
+        ]);
+    }
+    else{
+        return $this->json([
+            'status'=>'Error'
         ]);
     }
 

@@ -24,33 +24,33 @@ class CreateService
     }
     public function createUser($data):array{
         $user = new User();
-
-//        $name = $data->name;
-//        $email = $data->email;
-//        $surname = $data->surname;
-//        $companyName = $data->companyName;
-//        $address = $data->address;
-//        $pib = $data->pib;
-//        $city = $data->city;
-//        $password = $data->password;
-         //   $repeatedPassword = "";
+        $name = $data->firstName;
+        $email = $data->email;
+        $surname = $data->lastName;
+        $companyName = $data->companyName;
+        $address = $data->address;
+        $pib = intval($data->pib);
+        $city = $data->city;
+        $password = $data->password;
+        $repeatedPassword = $data->repeatPassword;
+        $phone = $data->phone;
 
         date_default_timezone_set("Europe/Belgrade");
         $date = new \DateTime();
         $date->format('Y-m-d');
         // 30 min to verifiy email from registration
-        $timeInt = strtotime(date('Y-m-d H:i:s'))+ 1800;
+        $timeInt = strtotime(date('Y-m-d H:i:s'))+ 3600;
        // dd(date('Y-m-d H:i:s'));
         $errors = [];
-        $name = "dsad";
-        $email = "dju33k32a@gmail.com";
-        $surname = "perica";
-        $companyName = "kompanija";
-        $address = "Per4a P21ero4va2 24";
-        $pib = 452114;
+      //  $name = "dsad";
+       // $email = "dju233k32a@gmail.com";
+       // $surname = "perica";
+       // $companyName = "kompanija";
+       // $address = "Per4a P321ero4va2 24";
+       // $pib = 4521414;
         $cityINT = 3;
-        $password = "taraba";
-        $repeatedPassword = "taraba";
+       // $password = "taraba";
+      //  $repeatedPassword = "taraba";
         if (!ctype_alpha($name)){
             $errors['error-name'] ='Name can only contain letters';
 
@@ -63,9 +63,9 @@ class CreateService
         {
                 $errors['error-surname'] ='Surname can only contain letters';
         }
-        if (!ctype_alpha($companyName))
+        if (is_numeric($companyName))
         {
-            $errors['error-company-name'] ='Surname can only contain letters';
+            $errors['error-company-name'] ='Company can only contain letters';
         }
         if (ctype_digit($address))
         {
@@ -101,7 +101,7 @@ class CreateService
             $user->setAddress($address);
             $user->setPib($pib);
             $user->setCity($cityString);
-            $user->setPhoneNumber('+394565456545');
+            $user->setPhoneNumber($phone);
             $user->setIsVerified(false);
             $user->setIsEmailVerified(false);
             $user->setVerificationExpire($timeInt);

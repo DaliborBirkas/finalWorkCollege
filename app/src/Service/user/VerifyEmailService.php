@@ -18,6 +18,7 @@ class VerifyEmailService extends AbstractController
         $email = $request->attributes->get('email');
         $expires = intval($request->attributes->get('expires'));
         $currentTime = strtotime(date('Y-m-d H:i:s'));
+
         $info = [];
         try {
             if($user = $this->em->getRepository(User::class)->findOneBy(['email' => $email,'verificationExpire'=>$expires,'isEmailVerified'=>false])){
