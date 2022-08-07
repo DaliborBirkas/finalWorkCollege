@@ -107,15 +107,16 @@ class CreateService
             $user->setDateOfCreation($date);
             $this->em->persist($user);
             $this->em->flush();
-            $errors['status'] = 'Created';
+          //  $errors['status'] = 'Created';
             }
             catch (\Exception $exception){
                  $errors['status'] = $exception->getMessage();
             }
+            if (empty($errors['status'])){
+                $this->mailerService->createEmail($email,$name,$timeInt);
+            }
         }
-        if ($errors['status']='Created'){
-            $this->mailerService->createEmail($email,$name,$timeInt);
-        }
+
         return $errors;
 
     }

@@ -15,7 +15,7 @@ class CityController extends AbstractController
     public function __construct(private readonly CityService $cityService)
     {
     }
-    #[Route('/insert/city', name: 'app_insert_city')]
+    #[Route('/insert/city', name: 'app_insert_city',methods: 'POST')]
     public function insert(): JsonResponse
     {
         $this->cityService->insertCity();

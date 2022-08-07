@@ -20,7 +20,7 @@ class UserController extends AbstractController
                                 private  readonly EntityManagerInterface $em,private readonly MailerInterface $mailer){
 
     }
-    #[Route('/user/create', name: 'app_user_create')]
+    #[Route('/user/create', name: 'app_user_create',methods: 'POST')]
     public function registration(Request $request): JsonResponse
     {
 
@@ -35,12 +35,15 @@ class UserController extends AbstractController
 //            ]);
 //        }
         $data = $this->createService->createUser(json_decode($request->getContent()));
+        if (empty($data)){
+            $data = 'Created';
+        }
 
         return $this->json([
             'status'=>$data
         ]);
     }
-    #[Route('/user/verify_email/{email}/{expires}', name: 'app_user_verify_email')]
+    #[Route('/user/verify_email/{email}/{expires}', name: 'app_user_verify_email',methods: ['GET','POST'])]
     public function verifiyEmail(Request $request)
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $request->attributes->get('email')]);

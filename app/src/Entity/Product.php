@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,14 @@ class Product
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderedProducts::class)]
+    private Collection $orderedProducts;
+
+    public function __construct()
+    {
+        $this->orderedProducts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -108,6 +118,36 @@ class Product
     public function setImage(string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OrderedProducts>
+     */
+    public function getOrderedProducts(): Collection
+    {
+        return $this->orderedProducts;
+    }
+
+    public function addOrderedProduct(OrderedProducts $orderedProduct): self
+    {
+        if (!$this->orderedProducts->contains($orderedProduct)) {
+            $this->orderedProducts->add($orderedProduct);
+            $orderedProduct->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderedProduct(OrderedProducts $orderedProduct): self
+    {
+        if ($this->orderedProducts->removeElement($orderedProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($orderedProduct->getProduct() === $this) {
+                $orderedProduct->setProduct(null);
+            }
+        }
 
         return $this;
     }

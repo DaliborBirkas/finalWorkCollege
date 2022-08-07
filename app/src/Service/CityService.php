@@ -29,10 +29,8 @@ class CityService extends AbstractController
     }
 
     public function getCity() :array{
-        $city = $this->em->getRepository(City::class)->findAll();
-
-
-        // returns an array of Product object
+        // sort by ascening, findall can not do order by
+        $city = $this->em->getRepository(City::class)->findBy(array(),array('name'=>'ASC'));
         $cities = [];
         $number = 0 ;
         foreach ($city as $value){

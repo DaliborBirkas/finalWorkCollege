@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -19,16 +20,18 @@ class ResetPasswordController extends AbstractController
                                  private readonly UserPasswordHasherInterface $passwordHashed){
 
     }
-    #[Route('/reset/password', name: 'app_reset_password')]
-    public function sendRequest()
+    #[Route('/reset/password', name: 'app_reset_password', methods: 'POST')]
+    public function sendRequest(Request $request)
     {
         $rand = substr(md5(microtime()),rand(0,26),5);
         $resetPw = new ResetPassword();
         // 10 minutes then expires
         $timeInt = strtotime(date('Y-m-d H:i:s'))+ 600;
         $message= "";
-
         $email = "dalibor@mail.com";
+
+        $data = json_decode($request->getContent());
+        $email = $data->email;
         $emailReset =$this->em->getRepository(ResetPassword::class)->findBy(['email'=>$email]);
         $user = $this->em->getRepository(User::class)->findBy(['email'=>$email]);
         if (empty($user)){
@@ -92,7 +95,7 @@ class ResetPasswordController extends AbstractController
 
     }
     #[Route('/reset/password/change', name: 'app_reset_password_change')]
-    public function resetPassword()
+    public function resetPassword(Request $request)
     {
         $email = "dalibor@mail.com";
         $validator = "81dd9";
@@ -100,6 +103,12 @@ class ResetPasswordController extends AbstractController
 
         $password = "test";
         $passwordRepeated = "test";
+
+        $data = json_decode($request->getContent());
+        $email = $data->email;
+        $validator = $data->validator;
+        $password = $data->password;
+        $passwordRepeated = $data->passwordRepeated;
 
         $emailReset =$this->em->getRepository(ResetPassword::class)->findOneBy(['email'=>$email,'validator'=>$validator]);
         if (empty($emailReset)){
