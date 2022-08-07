@@ -23,13 +23,12 @@ class CityController extends AbstractController
             'status'=>'insert done']);
 
     }
-    #[Route('/get/city', name: 'app_get_city')]
+
+    #[Route('/get/city', name: 'app_get_city', methods: 'GET')]
     public function get(): JsonResponse
     {
-       $city = $this->cityService->getCity();
-        return $this->json([
-            'status'=>'get done',
-            'data'=>$city]);
+        $city = $this->cityService->getCity();
+        return $this->json($city, Response::HTTP_OK);
     }
 
 }

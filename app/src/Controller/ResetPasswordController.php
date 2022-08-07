@@ -77,7 +77,6 @@ class ResetPasswordController extends AbstractController
                     <h4> Kreirali smo novi zahtev</h4>   
                     <p>Vas kod je $rand2</p>
                     <br>
-
                     <h4>Kozna galenterija</h4>
                     <h4>Dalibor</h4>
                     <h4>+38564655456</h4>                
