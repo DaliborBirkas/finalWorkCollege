@@ -30,7 +30,7 @@ class CreateService
         $companyName = $data->companyName;
         $address = $data->address;
         $pib = intval($data->pib);
-        $city = $data->city;
+        $cityINT = $data->city;
         $password = $data->password;
         $repeatedPassword = $data->repeatPassword;
         $phone = $data->phone;
@@ -48,7 +48,6 @@ class CreateService
        // $companyName = "kompanija";
        // $address = "Per4a P321ero4va2 24";
        // $pib = 4521414;
-        $cityINT = 3;
        // $password = "taraba";
       //  $repeatedPassword = "taraba";
         if (!ctype_alpha($name)){

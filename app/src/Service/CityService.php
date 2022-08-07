@@ -2,6 +2,7 @@
 
 namespace App\Service;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\City;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,6 +30,9 @@ class CityService extends AbstractController
 
     public function getCity() :array{
         $city = $this->em->getRepository(City::class)->findAll();
+
+
+        // returns an array of Product object
         $cities = [];
         $number = 0 ;
         foreach ($city as $value){
