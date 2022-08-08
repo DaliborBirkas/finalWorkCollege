@@ -21,8 +21,12 @@ class OrderController extends AbstractController
 
        $order =  $this->orderService->createOrder($data);
 
+
       if(empty($order)){
           return $this->json('Can not create order',Response::HTTP_OK);
+      }
+      if ($order = 'Amount not valid'){
+          return  $this->json('Over limit, pay debt');
       }
       else{
           $this->orderService->storeOrderedProducts($order);

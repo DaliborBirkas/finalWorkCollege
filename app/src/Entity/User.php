@@ -112,6 +112,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Order::class)]
     private Collection $orders;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Debt $debt = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -353,6 +356,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $order->setUserId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDebt(): ?Debt
+    {
+        return $this->debt;
+    }
+
+    public function setDebt(Debt $debt): self
+    {
+        // set the owning side of the relation if necessary
+        if ($debt->getUser() !== $this) {
+            $debt->setUser($this);
+        }
+
+        $this->debt = $debt;
 
         return $this;
     }
