@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Favorite;
+use App\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Service\favorite\FavoriteService;
+
+class FavoriteController extends AbstractController
+{
+    #[Route('/favorite', name: 'app_favorite')]
+    public function index(Request $request,FavoriteService $favoriteService): Response
+    {
+        // can be true, depends on the user
+        $favoriteService->setLikes($request);
+        return $this->json('Success');
+    }
+    #[Route('/favorite/get', name: 'app_favorite_get')]
+    public function favorite(EntityManagerInterface $em): Response
+    {
+        // can be true, depends on the user
+        $favorites = $em->getRepository(Favorite::class)->findAll();
+        $response = [];
+        foreach ($favorites as $favorite){
+            $favoriteLikes = $favorite->getLikes();
+            $product = $em->getRepository(Product::class)->findOneBy(['id'=>$favorite->getProduct()]);
+            $productName = $product->getName();
+            $data['likes'] = $favoriteLikes;
+            $data['product'] = $productName;
+            $response[] = $data;
+
+        }
+        return $this->json($response);
+
+    }
+}

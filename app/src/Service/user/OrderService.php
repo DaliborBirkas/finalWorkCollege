@@ -48,8 +48,6 @@ class OrderService extends AbstractController
 
                 if ($amount<60000){
 
-
-
                     $currentDate = date_create('now');
                     $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
                     $price = 1111.22;

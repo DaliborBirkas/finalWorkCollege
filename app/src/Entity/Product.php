@@ -40,6 +40,9 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: OrderedProducts::class)]
     private Collection $orderedProducts;
 
+    #[ORM\OneToOne(mappedBy: 'product', cascade: ['persist', 'remove'])]
+    private ?Favorite $favorite = null;
+
     public function __construct()
     {
         $this->orderedProducts = new ArrayCollection();
@@ -148,6 +151,23 @@ class Product
                 $orderedProduct->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFavorite(): ?Favorite
+    {
+        return $this->favorite;
+    }
+
+    public function setFavorite(Favorite $favorite): self
+    {
+        // set the owning side of the relation if necessary
+        if ($favorite->getProduct() !== $this) {
+            $favorite->setProduct($this);
+        }
+
+        $this->favorite = $favorite;
 
         return $this;
     }
