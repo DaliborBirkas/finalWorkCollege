@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Favorite;
 use App\Entity\Product;
+use Doctrine\DBAL\Exception\DatabaseDoesNotExist;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,14 +25,16 @@ class FavoriteController extends AbstractController
     public function favorite(EntityManagerInterface $em): Response
     {
         // can be true, depends on the user
-        $favorites = $em->getRepository(Favorite::class)->findAll();
+        $favorites = $em->getRepository(Favorite::class)->findBy(array(),array('likes'=>'DESC'),10);
         $response = [];
         foreach ($favorites as $favorite){
+
             $favoriteLikes = $favorite->getLikes();
             $product = $em->getRepository(Product::class)->findOneBy(['id'=>$favorite->getProduct()]);
             $productName = $product->getName();
             $data['likes'] = $favoriteLikes;
             $data['product'] = $productName;
+            $data['picture'] = $product->getImage();
             $response[] = $data;
 
         }
