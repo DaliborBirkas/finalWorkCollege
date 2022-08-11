@@ -59,7 +59,7 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS  }
 #        -  { path: ^home, roles: ROLE_USER  }
         - { path: ^/user/create, role: PUBLIC_ACCESS}
-        #- { path: ^/api, roles: IS_AUTHENTICATED_FULLY  }
+       # - { path: ^/home, roles: IS_AUTHENTICATED_FULLY  }
 
 when@test:
     security:

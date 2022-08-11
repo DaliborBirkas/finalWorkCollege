@@ -105,6 +105,7 @@ class CreateService
             $user->setIsEmailVerified(false);
             $user->setVerificationExpire($timeInt);
             $user->setDateOfCreation($date);
+            $user->setRabat(0);
             $this->em->persist($user);
             $this->em->flush();
           //  $errors['status'] = 'Created';

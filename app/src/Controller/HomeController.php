@@ -14,6 +14,6 @@ class HomeController extends AbstractController
     public function index(ManagerRegistry $registry): Response
     {
         $users = $registry->getRepository(User::class)->findAll();
-       return $this->json($users);
+        return $this->json($users);
     }
 }

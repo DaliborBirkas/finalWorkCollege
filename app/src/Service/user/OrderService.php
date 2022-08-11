@@ -11,11 +11,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 
 class OrderService extends AbstractController
 {
-    public function __construct( private  readonly EntityManagerInterface $em, private readonly UserPasswordHasherInterface $passwordHasher,
+    public function __construct( private  readonly EntityManagerInterface $em,
                                  private readonly MailerInterface $mailerService)
     {
 
@@ -29,9 +29,10 @@ class OrderService extends AbstractController
 //        $orderNote = ;
 
 
-        $email = "korisnik2234@gmail.com";
+        $email = "nikola@gmail.com";
 
         $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
+        $userRabat = $user->getRabat();
         $userName= $user->getName();
         $userVerifiedMail = $user->isIsEmailVerified();
         $userVerifiedAdmin = $user->isIsVerified();
@@ -40,10 +41,35 @@ class OrderService extends AbstractController
             if ($userVerifiedAdmin){
 
                 $debt = $this->em->getRepository(Debt::class)->findOneBy(['user'=>$user]);
+                if (empty($debt)){
+                    $currentDate = date_create('now');
+                    $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
+                    $price = 1111.22;
+                    if ($userRabat!=0){
+                        $price = $price - ($price/$userRabat);
+                    }
 
-                $amount = $debt->getAmount();
+                    $orderNote = "Racun please";
+
+                    $order = new Order();
+
+                    $order->setUserId($user);
+                    $order->setOrderNote($orderNote);
+                    $order->setOrderDate($currentDate);
+                    $order->setSent(false);
+                    $order->setPrice($price);
+                    $order->setPaid(false);
+                    $this->em->persist($order);
+                    $this->em->flush();
+
+                    return $order->getId();
+                }
+
+               // $amount = $debt->getAmount();
                // $amount = $amount + $totalPrice;
-                $amount = 100000;
+
+                $amount = 11;
+
 
 
                 if ($amount<60000){
@@ -51,6 +77,7 @@ class OrderService extends AbstractController
                     $currentDate = date_create('now');
                     $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
                     $price = 1111.22;
+                  //  $price = $price - ($price/$user);
                     $orderNote = "Racun please";
 
                     $order = new Order();
@@ -105,8 +132,6 @@ class OrderService extends AbstractController
             $this->mailerService->send($email);
 
         }
-
-
 
     }
 

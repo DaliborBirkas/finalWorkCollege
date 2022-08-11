@@ -115,6 +115,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Debt $debt = null;
 
+    #[ORM\Column]
+    private ?int $rabat = null;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
@@ -373,6 +376,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->debt = $debt;
+
+        return $this;
+    }
+
+    public function getRabat(): ?int
+    {
+        return $this->rabat;
+    }
+
+    public function setRabat(int $rabat): self
+    {
+        $this->rabat = $rabat;
 
         return $this;
     }
