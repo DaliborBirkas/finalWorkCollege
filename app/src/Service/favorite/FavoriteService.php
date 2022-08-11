@@ -16,7 +16,7 @@ class FavoriteService extends AbstractController
     public function setLikes($data){
 
         // can be true
-        $like = false;
+        $like = true;
         //id product
         $id = 1;
 

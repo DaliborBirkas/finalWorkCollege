@@ -56,7 +56,6 @@ class StatisticsController extends AbstractController
 
 //        $browser = new Browser();
 //        dump($browser->isAol(), $browser->getPlatform(),$browser->getVersion(),$browser->getUserAgent(),$browser->isMobile(),$browser->isTablet());
-        dd($_SERVER);
         $orders = $this->em->getRepository(OrderedProducts::class)->findBy(['orderNumber'=>$id]);
         $dataAll = [];
         foreach ($orders as $order){

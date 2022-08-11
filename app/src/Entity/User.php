@@ -102,7 +102,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $isEmailVerified = null;
 
 
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateOfCreation = null;
 
