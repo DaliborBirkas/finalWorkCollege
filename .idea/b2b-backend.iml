@@ -102,6 +102,7 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/twig/extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/sendgrid-mailer" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/google-mailer" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/cbschuld/browser.php" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

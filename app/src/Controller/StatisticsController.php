@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Entity\OrderedProducts;
 use App\Entity\Product;
 use App\Entity\User;
+use Browser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,7 +52,11 @@ class StatisticsController extends AbstractController
     public function statisticsOrder(): Response
     {
         $id = 16;
+        date_default_timezone_set("Europe/Belgrade");
 
+//        $browser = new Browser();
+//        dump($browser->isAol(), $browser->getPlatform(),$browser->getVersion(),$browser->getUserAgent(),$browser->isMobile(),$browser->isTablet());
+        dd($_SERVER);
         $orders = $this->em->getRepository(OrderedProducts::class)->findBy(['orderNumber'=>$id]);
         $dataAll = [];
         foreach ($orders as $order){

@@ -102,6 +102,7 @@
       <path value="$PROJECT_DIR$/app/vendor/twig/extra-bundle" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/sendgrid-mailer" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/google-mailer" />
+      <path value="$PROJECT_DIR$/app/vendor/cbschuld/browser.php" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1">

@@ -118,9 +118,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $rabat = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Logs::class)]
+    private Collection $logs;
+
     public function __construct()
     {
         $this->orders = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
 
@@ -388,6 +392,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRabat(int $rabat): self
     {
         $this->rabat = $rabat;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Logs>
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function addLog(Logs $log): self
+    {
+        if (!$this->logs->contains($log)) {
+            $this->logs->add($log);
+            $log->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLog(Logs $log): self
+    {
+        if ($this->logs->removeElement($log)) {
+            // set the owning side to null (unless already changed)
+            if ($log->getUser() === $this) {
+                $log->setUser(null);
+            }
+        }
 
         return $this;
     }

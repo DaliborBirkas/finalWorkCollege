@@ -15,7 +15,7 @@ class ProductController extends AbstractController
     public  function __construct(private readonly EntityManagerInterface $em){
 
     }
-    #[Route('/product', name: 'app_product')]
+    #[Route('/product', name: 'app_product',methods: 'GET')]
     public function index(): Response
     {
         $products =(array)$this->em->getRepository(Product::class)->findAll();
@@ -34,7 +34,7 @@ class ProductController extends AbstractController
         }
         return $this->json($data);
     }
-    #[Route('/product/findByCategory', name: 'app_product_find_by_category')]
+    #[Route('/product/findByCategory', name: 'app_product_find_by_category',methods: 'GET')]
     public function findByCategory(Request $request): Response
     {
         $info = json_decode($request->getContent());
@@ -46,6 +46,25 @@ class ProductController extends AbstractController
 
         $categoryArray = [];
 
+        foreach ($products as $key=>$product){
+            $categoryArray['id'] = $product->getId();
+            $categoryArray['category']= $product->getCategory()->getName();
+            $categoryArray['balance'] = $product->getBalance();
+            $categoryArray['name']= $product->getName();
+            $categoryArray['description'] = $product->getDescription();
+            $categoryArray['price'] = $product->getPrice();
+            $categoryArray['image'] = $product->getImage();
+            $data[] = $categoryArray;
+        }
+        return $this->json($data);
+    }
+
+    #[Route('/product/five', name: 'app_product_five',methods: 'GET')]
+    public function five(): Response
+    {
+        $products =$this->em->getRepository(Product::class)->findBy(array(),array('price'=>'ASC'),5);
+        $data = [];
+        $categoryArray = [];
         foreach ($products as $key=>$product){
             $categoryArray['id'] = $product->getId();
             $categoryArray['category']= $product->getCategory()->getName();
