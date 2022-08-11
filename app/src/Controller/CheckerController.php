@@ -14,13 +14,12 @@ class CheckerController extends AbstractController
 
     }
     #[Route('/checker', name: 'app_checker')]
-    public function index(): Response
+    public function index()
     {
         $currentTime = strtotime(date('Y-m-d H:i:s'));
         $users = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>false]);
         if (!empty($users)){
             foreach ($users as $user){
-                dump($user);
                 $userID = $user->getId();
                 $expires = $user->getVerificationExpire();
                 if ($expires<$currentTime){
@@ -29,8 +28,6 @@ class CheckerController extends AbstractController
                 }
             }
         }
-        return $this->render('checker/index.html.twig', [
-            'controller_name' => 'CheckerController',
-        ]);
+
     }
 }

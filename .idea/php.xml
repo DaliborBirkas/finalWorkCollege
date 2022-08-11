@@ -103,6 +103,9 @@
       <path value="$PROJECT_DIR$/app/vendor/symfony/sendgrid-mailer" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/google-mailer" />
       <path value="$PROJECT_DIR$/app/vendor/cbschuld/browser.php" />
+      <path value="$PROJECT_DIR$/app/vendor/cron/cron" />
+      <path value="$PROJECT_DIR$/app/vendor/cron/cron-bundle" />
+      <path value="$PROJECT_DIR$/app/vendor/symfony/process" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1">

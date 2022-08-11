@@ -103,6 +103,9 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/sendgrid-mailer" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/google-mailer" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/cbschuld/browser.php" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/cron/cron" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/cron/cron-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/process" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -19,9 +21,12 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    private $time;
+    public const VERIFIED = 0;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+        $this->time =  strtotime(date('Y-m-d H:i:s'));
     }
 
     public function add(User $entity, bool $flush = false): void
@@ -54,6 +59,23 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user->setPassword($newHashedPassword);
 
         $this->add($user, true);
+    }
+
+    public function countExpired():int{
+        return $this->getExpiriredVerification()->select('COUNT(u.id)')->getQuery()->getSingleScalarResult();
+    }
+    public function deleteExpired():int{
+        return $this->getExpiriredVerification()->delete()->getQuery()->execute();
+    }
+
+    private function getExpiriredVerification(): QueryBuilder{
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.verificationExpire < :time')
+            ->andWhere('u.isEmailVerified = :verified')
+            ->setParameters([
+                ':time' => $this->time,
+                ':verified'=> self::VERIFIED
+            ]);
     }
 
 //    /**

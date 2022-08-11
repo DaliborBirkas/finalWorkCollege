@@ -39,7 +39,7 @@ class CreateService
         $date = new \DateTime();
         $date->format('Y-m-d');
         // 30 min to verifiy email from registration
-        $timeInt = strtotime(date('Y-m-d H:i:s'))+ 3600;
+        $timeInt = strtotime(date('Y-m-d H:i:s'))+ 20;
        // dd(date('Y-m-d H:i:s'));
         $errors = [];
       //  $name = "dsad";
