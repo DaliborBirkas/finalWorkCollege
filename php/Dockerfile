@@ -21,3 +21,12 @@ RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install --global yarn
+
+# PCNTL extension for CHRON
+ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && install-php-extensions pcntl
+
+#ARG DEBIAN_FRONTEND=noninteractive
+#ENV TZ=Europe/Belgrade
+#RUN apt-get install -y tzdata
+

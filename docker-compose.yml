@@ -5,6 +5,7 @@ networks:
 
 services:
 
+
   # nginx
   nginx-service:
     image: nginx:stable-alpine # alpha (default version image)
