@@ -43,6 +43,9 @@ class Product
     #[ORM\OneToOne(mappedBy: 'product', cascade: ['persist', 'remove'])]
     private ?Favorite $favorite = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
+    private ?string $discountPrice = null;
+
     public function __construct()
     {
         $this->orderedProducts = new ArrayCollection();
@@ -168,6 +171,18 @@ class Product
         }
 
         $this->favorite = $favorite;
+
+        return $this;
+    }
+
+    public function getDiscountPrice(): ?string
+    {
+        return $this->discountPrice;
+    }
+
+    public function setDiscountPrice(string $discountPrice): self
+    {
+        $this->discountPrice = $discountPrice;
 
         return $this;
     }

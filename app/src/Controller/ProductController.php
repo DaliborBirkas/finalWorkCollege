@@ -54,6 +54,7 @@ class ProductController extends AbstractController
             $categoryArray['description'] = $product->getDescription();
             $categoryArray['price'] = $product->getPrice();
             $categoryArray['image'] = $product->getImage();
+            $categoryArray['discountPrice'] = $product->getDiscountPrice();
             $data[] = $categoryArray;
         }
         return $this->json($data);
@@ -73,6 +74,7 @@ class ProductController extends AbstractController
             $categoryArray['description'] = $product->getDescription();
             $categoryArray['price'] = $product->getPrice();
             $categoryArray['image'] = $product->getImage();
+            $categoryArray['discountPrice'] = $product->getDiscountPrice();
             $data[] = $categoryArray;
         }
         return $this->json($data);
