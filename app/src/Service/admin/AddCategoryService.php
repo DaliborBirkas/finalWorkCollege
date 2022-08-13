@@ -11,7 +11,7 @@ class AddCategoryService extends AbstractController
     public function __construct( private  readonly EntityManagerInterface $em){
 
     }
-    public function addCategory($name){
+    public function addCategory($name,){
         $status = 'Success';
         if (!ctype_alpha($name)){
             $status ='Declined';

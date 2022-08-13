@@ -20,7 +20,7 @@ class ResetPasswordController extends AbstractController
                                  private readonly UserPasswordHasherInterface $passwordHashed){
 
     }
-    #[Route('/reset/password', name: 'app_reset_password', methods: 'POST')]
+    #[Route('/reset/password', name: 'app_reset_password', methods: 'GET')]
     public function sendRequest(Request $request)
     {
         $rand = substr(md5(microtime()),rand(0,26),5);
@@ -28,10 +28,10 @@ class ResetPasswordController extends AbstractController
         // 10 minutes then expires
         $timeInt = strtotime(date('Y-m-d H:i:s'))+ 600;
         $message= "";
-        $email = "dalibor@mail.com";
+        $email = "dbirkas3@gmail.com";
 
         $data = json_decode($request->getContent());
-        $email = $data->email;
+       // $email = $data->email;
         $emailReset =$this->em->getRepository(ResetPassword::class)->findBy(['email'=>$email]);
         $user = $this->em->getRepository(User::class)->findBy(['email'=>$email]);
         if (empty($user)){
@@ -52,7 +52,7 @@ class ResetPasswordController extends AbstractController
                 ->html("
                     <h2>Postovani  </h2><br>
                     <h4>Vas zahtev za novu lozinku je kreiran</h4>   
-                    <p>Vas kod za promenu lozinke je<b>$rand</b></p>
+                    <p>Vas kod za promenu lozinke je<b> $rand</b></p>
                     <br>
 
                     <h4>Kozna galenterija</h4>
@@ -97,18 +97,18 @@ class ResetPasswordController extends AbstractController
     #[Route('/reset/password/change', name: 'app_reset_password_change')]
     public function resetPassword(Request $request)
     {
-        $email = "dalibor@mail.com";
-        $validator = "81dd9";
+        $email = "dbirkas3@gmail.com";
+        $validator = "77c1e";
         $timeInt = strtotime(date('Y-m-d H:i:s'));
 
-        $password = "test";
-        $passwordRepeated = "test";
+        $password = "test123";
+        $passwordRepeated = "test123";
 
         $data = json_decode($request->getContent());
-        $email = $data->email;
-        $validator = $data->validator;
-        $password = $data->password;
-        $passwordRepeated = $data->passwordRepeated;
+      //  $email = $data->email;
+       // $validator = $data->validator;
+      //  $password = $data->password;
+      //  $passwordRepeated = $data->passwordRepeated;
 
         $emailReset =$this->em->getRepository(ResetPassword::class)->findOneBy(['email'=>$email,'validator'=>$validator]);
         if (empty($emailReset)){

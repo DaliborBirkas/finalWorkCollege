@@ -63,6 +63,29 @@ class ProductController extends AbstractController
     #[Route('/product/five', name: 'app_product_five',methods: 'GET')]
     public function five(): Response
     {
+        $products=$this->em->getRepository(Product::class)->findBy(array(),array('discountPrice'=>'DESC'),5);
+        $topFiveProducts = [];
+        foreach ($products as $product){
+            $eachProduct = [];
+            $productName = $product->getName();
+            $productDescription = $product->getDescription();
+            $productOldPrice = $product->getPrice();
+            $productBalance = $product->getBalance();
+            $productNewPrice = $product->getDiscountPrice();
+
+            $category = $this->em->getRepository(Category::class)->findOneBy(['id'=>$product->getCategory()]);
+            $categortName = $category->getName();
+
+            $eachProduct['name'] = $productName;
+            $eachProduct['description'] = $productDescription;
+            $eachProduct['oldPrice'] = $productOldPrice;
+            $eachProduct['newPrice'] = $productNewPrice;
+            $eachProduct['balance'] = $productBalance;
+            $eachProduct['categoryName'] = $categortName;
+            $topFiveProducts[] =$eachProduct;
+
+        }
+        dd($topFiveProducts);
         $products =$this->em->getRepository(Product::class)->findBy(array(),array('price'=>'ASC'),5);
         $data = [];
         $categoryArray = [];
