@@ -106,6 +106,14 @@
       <path value="$PROJECT_DIR$/app/vendor/cron/cron" />
       <path value="$PROJECT_DIR$/app/vendor/cron/cron-bundle" />
       <path value="$PROJECT_DIR$/app/vendor/symfony/process" />
+      <path value="$PROJECT_DIR$/app/vendor/knplabs/knp-snappy" />
+      <path value="$PROJECT_DIR$/app/vendor/knplabs/knp-snappy-bundle" />
+      <path value="$PROJECT_DIR$/app/vendor/masterminds/html5" />
+      <path value="$PROJECT_DIR$/app/vendor/dompdf/dompdf" />
+      <path value="$PROJECT_DIR$/app/vendor/phenx/php-svg-lib" />
+      <path value="$PROJECT_DIR$/app/vendor/phenx/php-font-lib" />
+      <path value="$PROJECT_DIR$/app/vendor/sabberworm/php-css-parser" />
+      <path value="$PROJECT_DIR$/app/vendor/h4cc/wkhtmltopdf-amd64" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.1">

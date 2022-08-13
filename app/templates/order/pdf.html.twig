@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<body>
+<div class="body">
+  <h1 align="left">Kozna galenterija D.O.O.</h1>
+  <h4 align="left">Blaska rajica 15, 24000 Subotica, Srbija</h4>
+  <h4 align="left">Tel: 024/555-666 </h4>
+  <h4 align="left">PIB: 10002000</h4>
+  <h4 align="left">Ziro racun: 170-565656565456-22</h4>
+  <hr>
+  <p align="right">Predracun napravljen dana:  {{ date }}</p>
+  <p ><strong>PODACI O KUPCU</strong><br><br> {{ name }} {{ surname }}<br>
+    {{ company }}<br>
+  {{ address }}<br>
+  {{ cityPostal }} {{ city }}<br>
+   Srbija <br>
+    PIB:{{ pib}} </p>
+  <h3 align="center">PREDRACUN BROJ: {{ idOrder }}</h3>
+  <p>Dan porudzbine: <strong>{{ orderDate}}</strong> </p>
+
+
+  <p align="left">Napomena:</p>
+  <p align="left">Mozete porucivati proizvode sve dok je vas dug ispod 60000 dinara</p>
+  <br>
+  <p>Smernice za placanje putem banke/uplatnice:</p>
+  <p>Broj racuna primaoca: 170-565656565456-22</p>
+  <p>Poziv na broj odobronjea: {{ idOrder }}</p>
+  <p>Valuta placanja: RSD</p>
+
+</div>
+</body>
+</html>

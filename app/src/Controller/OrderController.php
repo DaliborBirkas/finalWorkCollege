@@ -18,6 +18,7 @@ class OrderController extends AbstractController
     public function index(Request $request): Response
     {
        $data = json_decode($request->getContent());
+       // $publicDirectory = $this->get('kernel')->getProjectDir() . '/public/documents';
 
        $order =  $this->orderService->createOrder($data);
 
@@ -34,4 +35,6 @@ class OrderController extends AbstractController
       }
 
     }
+
+
 }

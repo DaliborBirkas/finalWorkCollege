@@ -14,4 +14,9 @@ class Kernel extends BaseKernel
         date_default_timezone_set($this->getContainer()->getParameter('timezone'));
     }
 
+    public function getProjectDir(): string
+    {
+        return \dirname(__DIR__);
+    }
+
 }

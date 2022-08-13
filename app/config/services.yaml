@@ -11,6 +11,8 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true
+        bind:
+            $projectDir: '%kernel.project_dir%'
 
     acme_api.event.jwt_created_listener:
         class: App\EventListener\JWTCreatedListener

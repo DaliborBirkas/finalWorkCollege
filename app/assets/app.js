@@ -10,3 +10,8 @@ import './styles/app.css';
 
 // start the Stimulus application
 import './bootstrap';
+
+var express = require('express');
+var cors = require('cors');
+var app = express();
+app.use(cors());

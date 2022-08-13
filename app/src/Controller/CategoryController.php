@@ -16,8 +16,8 @@ class CategoryController extends AbstractController
     #[Route('/category', name: 'app_category')]
     public function index(): Response
     {
-        $category = $this->em->getRepository(Category::class)->findAll();
 
+        $category = $this->em->getRepository(Category::class)->findAll();
         return $this->json($category);
     }
 

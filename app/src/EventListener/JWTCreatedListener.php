@@ -33,7 +33,7 @@ class JWTCreatedListener
     {
         $request = $this->requestStack->getCurrentRequest();
 
-        $payload       = $event->getData();
+        $payload= $event->getData();
         $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$payload['email']]);
 
 
@@ -67,10 +67,11 @@ class JWTCreatedListener
         $payload['surname'] = $user->getSurname();
         $payload['companyName'] = $user->getCompanyName();
 
-        $event->setData($payload);
+
 
         $header        = $event->getHeader();
         $header['cty'] = 'JWT';
+        $event->setData($payload);
 
         $event->setHeader($header);
     }

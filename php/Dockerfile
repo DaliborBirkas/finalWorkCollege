@@ -29,4 +29,16 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && install-php-ext
 #ARG DEBIAN_FRONTEND=noninteractive
 #ENV TZ=Europe/Belgrade
 #RUN apt-get install -y tzdata
+RUN apt-get update -qq && apt-get install -y \
+    # packages required by wkhtmlto*:
+    xfonts-base \
+    xfonts-75dpi \
+    pdftk # -> only if needed... \
+    # ...other custom packages...
 
+RUN curl -L#o wkhtmltopdf.deb https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb
+RUN dpkg -i wkhtmltopdf.deb; apt-get install -y -f
+
+# Remember to clean your package manager cache to reduce your custom image size...
+RUN apt-get clean all \
+    && rm -rvf /var/lib/apt/lists/

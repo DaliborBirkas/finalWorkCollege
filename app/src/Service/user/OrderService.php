@@ -2,25 +2,38 @@
 
 namespace App\Service\user;
 
+use App\Entity\City;
 use App\Entity\Debt;
 use App\Entity\Order;
 use App\Entity\OrderedProducts;
 use App\Entity\Product;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mailer\MailerInterface;
+use Twig\Environment;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Knp\Snappy\Pdf;
 
 
 class OrderService extends AbstractController
 {
+    private $pdf;
+    private $projectDir;
     public function __construct( private  readonly EntityManagerInterface $em,
-                                 private readonly MailerInterface $mailerService)
+                                 private readonly MailerInterface $mailerService, private readonly Environment $twig,
+                                 Pdf $pdf,string $projectDir  )
     {
-
+        $this->pdf = $pdf;
+        $this->projectDir = $projectDir;
     }
     public function createOrder($data){
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        $dompdf = new Dompdf($pdfOptions);
 
         date_default_timezone_set("Europe/Belgrade");
 
@@ -29,11 +42,19 @@ class OrderService extends AbstractController
 //        $orderNote = ;
 
 
-        $email = "nikola@gmail.com";
+        $email = "dbirkas3@gmail.com";
 
         $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
         $userRabat = $user->getRabat();
         $userName= $user->getName();
+        $userSurname = $user->getSurname();
+        $userCompany = $user->getCompanyName();
+        $userPib = $user->getPib();
+        $userAddress = $user->getAddress();
+        $userCity = $this->em->getRepository(City::class)->findOneBy(['id'=>$user->getCity()])->getName();
+        $cityPostalCode = $this->em->getRepository(City::class)->findOneBy(['id'=>$user->getCity()])->getPostalCode();
+        $userPhone = $user->getPhoneNumber();
+
         $userVerifiedMail = $user->isIsEmailVerified();
         $userVerifiedAdmin = $user->isIsVerified();
 
@@ -43,6 +64,7 @@ class OrderService extends AbstractController
                 $debt = $this->em->getRepository(Debt::class)->findOneBy(['user'=>$user]);
                 if (empty($debt)){
                     $currentDate = date_create('now');
+                    $currentDateForPdf = date('d.m.Y.');
                     $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
                     $price = 1111.22;
                     if ($userRabat!=0){
@@ -61,6 +83,63 @@ class OrderService extends AbstractController
                     $order->setPaid(false);
                     $this->em->persist($order);
                     $this->em->flush();
+
+                    $idOrder = $order->getId();
+
+//                    $html = $this->renderView('order/pdf.html.twig',[
+//                        'polje'=>$order
+//                    ]);
+                    $html = $this->twig->render('order/pdf.html.twig',[
+                        'name'=>$userName,
+                        'idOrder'=>$idOrder,
+                        'date'=>date('d.m.Y. H:i:s'),
+                        'surname'=>$userSurname,
+                        'company'=>$userCompany,
+                        'pib'=>$userPib,
+                        'address'=>$userAddress,
+                        'city'=>$userCity,
+                        'phone'=>$userPhone,
+                        'cityPostal'=>$cityPostalCode,
+                        'orderDate'=>$currentDateForPdf
+
+                    ]);
+                    $dompdf->loadHtml($html);
+                    $dompdf->setPaper('A4', 'portrait');
+                    $dompdf->render();
+//                    $dompdf->stream("mypdf.pdf", [
+//                        "Attachment" => true
+//                    ]);
+                    $output = $dompdf->output();
+                    $publicDirectory = $this->projectDir. '/public/documents/';
+                    $pdfFilepath = $publicDirectory.'predracun broj'.$idOrder.'.pdf';
+                    file_put_contents($pdfFilepath,$output);
+
+                  //  $pdf = $this->pdf->generateFromHtml($html);
+                   // $path = 'which wkhtmltopdf';
+                   // $pdf->binary = $path;
+
+                    $email = (new TemplatedEmail())
+                        ->to($email)
+                        //->cc('cc@example.com')
+                        //->bcc('bcc@example.com')
+                        //->replyTo('fabien@example.com')
+                        //->priority(Email::PRIORITY_HIGH)
+                        ->subject('Vasa narudzba')
+                        ->htmlTemplate('order/email.html.twig')
+                        ->context([
+                            'name'=>$userName,
+                            'idOrder'=>$idOrder
+//                            'name'=>$name,
+//                            'emailAddress'=>$to,
+//                            'expires'=>$expires
+                        ])
+                        //->attach(sprintf('your-order-%s.pdf',date('Y-m-d')));
+                        ->attachFromPath($pdfFilepath);
+
+
+
+                    $this->mailerService->send($email);
+
 
                     return $order->getId();
                 }

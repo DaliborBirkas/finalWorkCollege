@@ -11,9 +11,15 @@ class AppKernel
         $bundle = array(
 
             new Cron\CronBundle\CronCronBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
         );
 
 
+
         return $bundle;
+    }
+    public function getProjectDir(): string
+    {
+        return \dirname(__DIR__);
     }
 }
