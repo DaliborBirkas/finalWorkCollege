@@ -22,7 +22,6 @@ class OrderController extends AbstractController
 
        $order =  $this->orderService->createOrder($data);
 
-
       if(empty($order)){
           return $this->json('Can not create order',Response::HTTP_OK);
       }

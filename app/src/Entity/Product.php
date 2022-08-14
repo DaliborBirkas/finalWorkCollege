@@ -46,6 +46,11 @@ class Product
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $discountPrice = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $datum = null;
+
+
+
     public function __construct()
     {
         $this->orderedProducts = new ArrayCollection();
@@ -186,5 +191,19 @@ class Product
 
         return $this;
     }
+
+    public function getDatum(): ?\DateTimeInterface
+    {
+        return $this->datum;
+    }
+
+    public function setDatum(\DateTimeInterface $datum): self
+    {
+        $this->datum = $datum;
+
+        return $this;
+    }
+
+
 
 }

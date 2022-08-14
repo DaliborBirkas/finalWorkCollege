@@ -62,27 +62,16 @@ class SendNewsletterCommand extends Command
 
         $email = (new TemplatedEmail())
             ->to('dbirkas3@gmail.com')
-            //->cc('cc@example.com')
-            //->bcc('bcc@example.com')
-            //->replyTo('fabien@example.com')
-            //->priority(Email::PRIORITY_HIGH)
             ->subject('Top 5 proizvoda sa cenom na popustu')
             ->htmlTemplate('newsletter/newsletter.html.twig')
             ->context([
                 'products'=>$topFiveProducts
-
-
             ]);
-            //->attach(sprintf('your-order-%s.pdf',date('Y-m-d')));
-
-
-
-
         $this->mailerService->send($email);
 
 
 
-        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+        $io->success('Newsletter sent!');
 
         return Command::SUCCESS;
     }

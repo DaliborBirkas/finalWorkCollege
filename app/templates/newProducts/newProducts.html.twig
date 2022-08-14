@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Izdvajamo TOP 5 proizovda</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        td {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="body">
+    <h1 align="center">Kozna galenterija</h1>
+    <h3 align="center">Proizvodi dodati u poslednjih 24h</h3>
+    <table align="center">
+        <tr>
+            <th>Proizvod</th>
+            <th>Opis</th>
+            <th>Cena</th>
+            <th>Dostupna kolicina</th>
+            <th>Kategorija</th>
+        </tr>
+        {% for product in products %}
+            <tr>
+                {% for values in product%}
+                    <td>{{ values }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <p align="center">Dalibor</p>
+    <p align="center">Developer & Customer support</p>
+    <p align="center">Telefon: +54545656456</p>
+    <p align="center">Email: koznagalenterija@gmail.com</p>
+</div>
+</body>
+</html>
