@@ -98,11 +98,11 @@ class ResetPasswordController extends AbstractController
     public function resetPassword(Request $request)
     {
         $email = "dbirkas3@gmail.com";
-        $validator = "77c1e";
+        $validator = "dce5d";
         $timeInt = strtotime(date('Y-m-d H:i:s'));
 
-        $password = "test123";
-        $passwordRepeated = "test123";
+        $password = "testo";
+        $passwordRepeated = "testo";
 
         $data = json_decode($request->getContent());
       //  $email = $data->email;

@@ -4,6 +4,8 @@ namespace App\Command;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -37,8 +39,9 @@ class LastAddedProductCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $dayBefore = date('Y-m-d',strtotime("-1 days"));
-        $products = $this->em->getRepository(Product::class)->findBy(['dateForPublic'=>$dayBefore]);
+        $date = new DateTime('now');
+        $date = $date->modify( '-1 day' );
+        $products = $this->em->getRepository(Product::class)->findBy(['datum'=>$date]);
         $newProducts = [];
         foreach ($products as $product){
             $eachProduct = [];

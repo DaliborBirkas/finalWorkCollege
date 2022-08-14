@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use App\Service\user\CreateService;
 use App\Service\user\VerifyEmailService;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -114,11 +115,12 @@ class UserController extends AbstractController
             'status'=>'Error'
         ]);
     }
-
-
-
-
-
-
     }
+    #[Route('api/me', methods: 'GET')]
+    public function getCurrentUser(Request $request): JsonResponse
+    {
+        $user = $this->getUser();
+        return $this->json($user, Response::HTTP_OK);
+    }
+
 }

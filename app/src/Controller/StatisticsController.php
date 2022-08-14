@@ -20,7 +20,7 @@ class StatisticsController extends AbstractController
     #[Route('/statistics', name: 'app_statistics',methods: 'GET')]
     public function statistics(): Response
     {
-      $email = "nikola@gmail.com";
+      $email = "dbirkas3@gmail.com";
       $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
       $orders = $this->em->getRepository(Order::class)->findBy(['userId'=>$user]);
       $dataAll = [];

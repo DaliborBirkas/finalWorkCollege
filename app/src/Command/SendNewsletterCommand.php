@@ -62,7 +62,7 @@ class SendNewsletterCommand extends Command
 
         $email = (new TemplatedEmail())
             ->to('dbirkas3@gmail.com')
-            ->subject('Top 5 proizvoda sa cenom na popustu')
+            ->subject('Izdvajamo top proizvode sa cenom na popustu')
             ->htmlTemplate('newsletter/newsletter.html.twig')
             ->context([
                 'products'=>$topFiveProducts

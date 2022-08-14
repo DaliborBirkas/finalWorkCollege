@@ -20,7 +20,7 @@ class DebtService extends AbstractController
         $users = $this->em->getRepository(User::class)->findBy(['is_verified'=>true,'isEmailVerified'=>true]);
         foreach ($users as $user){
             $total = 0;
-            $orders = $this->em->getRepository(Order2::class)->findBy(['userId'=> $user,'paid'=>false]);
+            $orders = $this->em->getRepository(Order::class)->findBy(['userId'=> $user,'paid'=>false]);
             foreach ($orders as $order){
                 $total = $total + $order->getPrice();
             }
