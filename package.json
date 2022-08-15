@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@api-platform/api-doc-parser": "^0.15.2",
     "cors": "^2.8.5"
   }
 }

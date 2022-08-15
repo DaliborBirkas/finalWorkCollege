@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\user\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +19,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     public function __construct(private readonly CreateService $createService,private readonly VerifyEmailService $verifyEmailService,
-                                private  readonly EntityManagerInterface $em,private readonly MailerInterface $mailer){
+                                private  readonly EntityManagerInterface $em,private readonly MailerInterface $mailer,
+                                private readonly OrderService $orderService){
 
     }
     #[Route('/user/create', name: 'app_user_create',methods: 'POST')]
@@ -119,7 +121,9 @@ class UserController extends AbstractController
     #[Route('api/me', methods: 'GET')]
     public function getCurrentUser(Request $request): JsonResponse
     {
+       // $data = json_decode($request->getContent());
         $user = $this->getUser();
+       // $order =  $this->orderService->createOrder($data,$user);
         return $this->json($user, Response::HTTP_OK);
     }
 

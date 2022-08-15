@@ -19,8 +19,8 @@ class OrderController extends AbstractController
     {
        $data = json_decode($request->getContent());
        // $publicDirectory = $this->get('kernel')->getProjectDir() . '/public/documents';
-
-       $order =  $this->orderService->createOrder($data);
+        $user = $this->getUser();
+       $order =  $this->orderService->createOrder($data,$user);
 
       if(empty($order)){
           return $this->json('Can not create order',Response::HTTP_OK);

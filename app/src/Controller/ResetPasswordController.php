@@ -20,20 +20,24 @@ class ResetPasswordController extends AbstractController
                                  private readonly UserPasswordHasherInterface $passwordHashed){
 
     }
-    #[Route('/reset/password', name: 'app_reset_password', methods: 'GET')]
+    #[Route('/reset/password', name: 'app_reset_password')]
     public function sendRequest(Request $request)
     {
+        $data = json_decode($request->getContent());
         $rand = substr(md5(microtime()),rand(0,26),5);
         $resetPw = new ResetPassword();
         // 10 minutes then expires
         $timeInt = strtotime(date('Y-m-d H:i:s'))+ 600;
         $message= "";
-        $email = "dbirkas3@gmail.com";
+        $email = "pero68505@gmail.com";
+        //$email = $data->email;
 
         $data = json_decode($request->getContent());
        // $email = $data->email;
         $emailReset =$this->em->getRepository(ResetPassword::class)->findBy(['email'=>$email]);
-        $user = $this->em->getRepository(User::class)->findBy(['email'=>$email]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
+        $userName = $user->getName();
+        $userLastname = $user->getSurname();
         if (empty($user)){
             return $this->json([
                 'status'=>'User with this email does not exists'
@@ -50,9 +54,10 @@ class ResetPasswordController extends AbstractController
                 ->to($email)
                 ->subject('Promena lozinke')
                 ->html("
-                    <h2>Postovani  </h2><br>
+                    <h2>Postovani $userName $userLastname</h2><br>
                     <h4>Vas zahtev za novu lozinku je kreiran</h4>   
                     <p>Vas kod za promenu lozinke je<b> $rand</b></p>
+                    <p>Zahtev je validan 10 minuta</p>
                     <br>
 
                     <h4>Kozna galenterija</h4>
@@ -76,8 +81,8 @@ class ResetPasswordController extends AbstractController
                         ->to($email)
                         ->subject('Promena lozinke')
                         ->html("
-                    <h2>Postovani  </h2><br>
-                    <h4> Kreirali smo novi zahtev</h4>   
+                    <h2>Postovani  $userName $userLastname </h2><br>
+                    <h4> Kreirali smo novi zahtev za promenu lozinke</h4>   
                     <p>Vas kod je $rand2</p>
                     <br>
                     <h4>Kozna galenterija</h4>

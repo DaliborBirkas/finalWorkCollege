@@ -30,7 +30,7 @@ class OrderService extends AbstractController
         $this->pdf = $pdf;
         $this->projectDir = $projectDir;
     }
-    public function createOrder($data){
+    public function createOrder($data,$user){
         $pdfOptions = new Options();
         $pdfOptions->set('defaultFont', 'Arial');
         $dompdf = new Dompdf($pdfOptions);
@@ -41,10 +41,13 @@ class OrderService extends AbstractController
 //        $price = ;
 //        $orderNote = ;
 
+        //$email = $data->email;
+        // $user = $this->getUser();
+        // $email = $user->getEmail();
+        //$email = "dbirkas3@gmail.com";
+        $email = $user->getEmail();
 
-        $email = "dbirkas3@gmail.com";
-
-        $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
+      //  $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
         $userRabat = $user->getRabat();
         $userName= $user->getName();
         $userSurname = $user->getSurname();
@@ -66,7 +69,7 @@ class OrderService extends AbstractController
                     $currentDate = date_create('now');
                     $currentDateForPdf = date('d.m.Y.');
                     $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
-                    $price = 1111.22;
+                    $price = 1000.22;
                     if ($userRabat!=0){
                         $price = $price - ($price/$userRabat);
                     }
@@ -155,7 +158,7 @@ class OrderService extends AbstractController
 
                     $currentDate = date_create('now');
                     $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
-                    $price = 1111.22;
+                    $price = 900.22;
                   //  $price = $price - ($price/$user);
                     $orderNote = "Racun please";
 
