@@ -49,11 +49,15 @@ class Product
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $datum = null;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: FavoriteProduct::class)]
+    private Collection $favoriteProducts;
+
 
 
     public function __construct()
     {
         $this->orderedProducts = new ArrayCollection();
+        $this->favoriteProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -200,6 +204,36 @@ class Product
     public function setDatum(\DateTimeInterface $datum): self
     {
         $this->datum = $datum;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FavoriteProduct>
+     */
+    public function getFavoriteProducts(): Collection
+    {
+        return $this->favoriteProducts;
+    }
+
+    public function addFavoriteProduct(FavoriteProduct $favoriteProduct): self
+    {
+        if (!$this->favoriteProducts->contains($favoriteProduct)) {
+            $this->favoriteProducts->add($favoriteProduct);
+            $favoriteProduct->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavoriteProduct(FavoriteProduct $favoriteProduct): self
+    {
+        if ($this->favoriteProducts->removeElement($favoriteProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($favoriteProduct->getProduct() === $this) {
+                $favoriteProduct->setProduct(null);
+            }
+        }
 
         return $this;
     }

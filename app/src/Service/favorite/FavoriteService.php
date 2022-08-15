@@ -3,7 +3,9 @@
 namespace App\Service\favorite;
 
 use App\Entity\Favorite;
+use App\Entity\FavoriteProduct;
 use App\Entity\Product;
+use App\Entity\User;
 use App\Repository\FavoriteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -74,6 +76,83 @@ class FavoriteService extends AbstractController
             }
         }
 
+
+    }
+
+    public function productLikeByUser($data, $user){
+        $productId = $data->id;
+       // $productId = 1;
+        $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$productId]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['email'=>'pero68505@gmail.com']);
+        $user = $this->em->getRepository(User::class)->findOneBy(['id'=>$user]);
+
+        $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->findOneBy(['product'=>$product,'user'=>$user]);
+        if (empty($favoriteProduct)){
+
+            $newFavoriteProduct = new FavoriteProduct();
+            $newFavoriteProduct->setProduct($product);
+            $newFavoriteProduct->setUser($user);
+            $newFavoriteProduct->setLiked(1);
+
+            $this->em->persist($newFavoriteProduct);
+            $this->em->flush();
+        }
+        else{
+            $liked = $favoriteProduct->getLiked();
+            if ($liked==1){
+                $favoriteProduct->setLiked(0);
+                $this->em->persist($favoriteProduct);
+                $this->em->flush();
+            }
+            else{
+                $favoriteProduct->setLiked(1);
+                $this->em->persist($favoriteProduct);
+                $this->em->flush();
+            }
+        }
+    }
+    public function updateLikes($data){
+         $productId = $data->id;
+       // $productId = 1;
+        $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$productId]);
+
+        $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->findBy(['product'=>$product,'liked'=>1]);
+        $count = 0;
+        foreach ($favoriteProduct as $array){
+            $count++;
+        }
+        $favorite = $this->em->getRepository(Favorite::class)->findOneBy(['product'=>$product]);
+        if ($count!=0){
+
+            if (empty($favorite)){
+                dump('if');
+                $newFavorite = new Favorite();
+                $newFavorite->setProduct($product);
+                $newFavorite->setLikes($count);
+                $this->em->persist($newFavorite);
+                $this->em->flush();
+            }
+            else{
+                dump('else');
+                $favorite->setLikes($count);
+                $this->em->persist($favorite);
+                $this->em->flush();
+            }
+        }
+        else{
+            if (empty($favorite)){
+                $newFavorite = new Favorite();
+                $newFavorite->setProduct($product);
+                $newFavorite->setLikes($count);
+                $this->em->persist($newFavorite);
+                $this->em->flush();
+            }
+            else{
+                $favorite->setLikes($count);
+                $this->em->persist($favorite);
+                $this->em->flush();
+            }
+        }
 
     }
 

@@ -18,7 +18,11 @@ class FavoriteController extends AbstractController
     public function index(Request $request,FavoriteService $favoriteService): Response
     {
         // can be true, depends on the user
-        $favoriteService->setLikes($request);
+       // $favoriteService->setLikes($request);
+        $user = $this->getUser();
+        $data = json_decode($request->getContent());
+        $favoriteService->productLikeByUser($data,$user);
+        $favoriteService->updateLikes($data);
         return $this->json('Success');
     }
     #[Route('/favorite/get', name: 'app_favorite_get')]
