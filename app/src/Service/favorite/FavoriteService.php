@@ -81,15 +81,9 @@ class FavoriteService extends AbstractController
     }
 
     public function productLikeByUser($data, $userr){
+
         $productId = $data->id;
-//        $random = new Random();
-//        $random->setCheckerValue($r);
-//        $this->em->persist($random);
-//        $this->em->flush();
-       // $productId = 1;
         $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$productId]);
-      //  $user = $this->em->getRepository(User::class)->findOneBy(['email'=>'pero68505@gmail.com']);
-       // $user = $this->em->getRepository(User::class)->findOneBy(['id'=>$userr]);
 
         $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->findOneBy(['product'=>$product,'user'=>$userr]);
         if (empty($favoriteProduct)){
@@ -109,7 +103,7 @@ class FavoriteService extends AbstractController
                 $this->em->persist($favoriteProduct);
                 $this->em->flush();
             }
-            else{
+            if ($liked==0){
                 $favoriteProduct->setLiked(1);
                 $this->em->persist($favoriteProduct);
                 $this->em->flush();

@@ -126,13 +126,16 @@ class UserController extends AbstractController
        // $order =  $this->orderService->createOrder($data,$user);
         return $this->json($user, Response::HTTP_OK);
     }
-    #[Route('/user/update', name: 'app_user_update',methods: 'POST')]
-    public function updateInformation(Request $request, UpdateInformationsService $updateInformationsService)
-    {
-        $user = $this->getUser();
-        $data = json_decode($request->getContent());
-        $updateInformationsService->update($data,$user);
-    }
+
+
+//    #[Route('/user/update', name: 'app_user_update',methods: 'POST')]
+//    public function updateInformation(Request $request, UpdateInformationsService $updateInformationsService)
+//    {
+//        $user = $this->getUser();
+//        $data = json_decode($request->getContent());
+//        $message = $updateInformationsService->update($data,$user);
+//    }
+
 
     #[Route('/user/newpassword', name: 'app_user_new_password')]
     public function setNewPassword(Request $request,ChangePasswordService $changePasswordService)
