@@ -38,18 +38,9 @@ class CreateService
         date_default_timezone_set("Europe/Belgrade");
         $date = new \DateTime();
         $date->format('Y-m-d');
-        // 30 min to verifiy email from registration
-        $timeInt = strtotime(date('Y-m-d H:i:s'))+ 20;
-       // dd(date('Y-m-d H:i:s'));
+        $timeInt = strtotime(date('Y-m-d H:i:s'))+ 600;
         $errors = [];
-      //  $name = "dsad";
-       // $email = "dju233k32a@gmail.com";
-       // $surname = "perica";
-       // $companyName = "kompanija";
-       // $address = "Per4a P321ero4va2 24";
-       // $pib = 4521414;
-       // $password = "taraba";
-      //  $repeatedPassword = "taraba";
+
         if (!ctype_alpha($name)){
             $errors['error-name'] ='Name can only contain letters';
 

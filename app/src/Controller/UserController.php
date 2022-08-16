@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Random;
 use App\Entity\User;
+use App\Repository\UserRepository;
+use App\Service\user\ChangePasswordService;
 use App\Service\user\OrderService;
+use App\Service\user\UpdateInformationsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +18,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+
 
 class UserController extends AbstractController
 {
@@ -26,18 +32,8 @@ class UserController extends AbstractController
     #[Route('/user/create', name: 'app_user_create',methods: 'POST')]
     public function registration(Request $request): JsonResponse
     {
-
-//        if ($this->createService->createUser(json_decode($request->getContent()))){
-//            return $this->json([
-//                'status'=>'created'
-//            ]);
-//        }
-//        else{
-//            return $this->json([
-//                'status'=>'not created'
-//            ]);
-//        }
-        $data = $this->createService->createUser(json_decode($request->getContent()));
+        $dataDecoded = json_decode($request->getContent());
+        $data = $this->createService->createUser($dataDecoded);
         if (empty($data)){
             $data = 'Created';
         }
@@ -123,8 +119,31 @@ class UserController extends AbstractController
     {
        // $data = json_decode($request->getContent());
         $user = $this->getUser();
+//        $random = new Random();
+//        $random->setCheckerValue($user->getId());
+//        $this->em->persist($random);
+//        $this->em->flush();
        // $order =  $this->orderService->createOrder($data,$user);
         return $this->json($user, Response::HTTP_OK);
     }
+    #[Route('/user/update', name: 'app_user_update',methods: 'POST')]
+    public function updateInformation(Request $request, UpdateInformationsService $updateInformationsService)
+    {
+        $user = $this->getUser();
+        $data = json_decode($request->getContent());
+        $updateInformationsService->update($data,$user);
+    }
+
+    #[Route('/user/newpassword', name: 'app_user_new_password')]
+    public function setNewPassword(Request $request,ChangePasswordService $changePasswordService)
+    {
+        $data = json_decode($request->getContent());
+        $user = $this->getUser();
+        $message = $changePasswordService->updatePassword($data,$user);
+        return $this->json($message,Response::HTTP_OK);
+
+    }
+
+
 
 }

@@ -13,8 +13,23 @@ class Random
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $checkerValue = null;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getCheckerValue(): ?string
+    {
+        return $this->checkerValue;
+    }
+
+    public function setCheckerValue(?string $checkerValue): self
+    {
+        $this->checkerValue = $checkerValue;
+
+        return $this;
     }
 }

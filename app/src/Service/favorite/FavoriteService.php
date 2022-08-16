@@ -5,6 +5,7 @@ namespace App\Service\favorite;
 use App\Entity\Favorite;
 use App\Entity\FavoriteProduct;
 use App\Entity\Product;
+use App\Entity\Random;
 use App\Entity\User;
 use App\Repository\FavoriteRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -79,19 +80,23 @@ class FavoriteService extends AbstractController
 
     }
 
-    public function productLikeByUser($data, $user){
+    public function productLikeByUser($data, $userr){
         $productId = $data->id;
+//        $random = new Random();
+//        $random->setCheckerValue($r);
+//        $this->em->persist($random);
+//        $this->em->flush();
        // $productId = 1;
         $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$productId]);
-        $user = $this->em->getRepository(User::class)->findOneBy(['email'=>'pero68505@gmail.com']);
-        $user = $this->em->getRepository(User::class)->findOneBy(['id'=>$user]);
+      //  $user = $this->em->getRepository(User::class)->findOneBy(['email'=>'pero68505@gmail.com']);
+       // $user = $this->em->getRepository(User::class)->findOneBy(['id'=>$userr]);
 
-        $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->findOneBy(['product'=>$product,'user'=>$user]);
+        $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->findOneBy(['product'=>$product,'user'=>$userr]);
         if (empty($favoriteProduct)){
 
             $newFavoriteProduct = new FavoriteProduct();
             $newFavoriteProduct->setProduct($product);
-            $newFavoriteProduct->setUser($user);
+            $newFavoriteProduct->setUser($userr);
             $newFavoriteProduct->setLiked(1);
 
             $this->em->persist($newFavoriteProduct);
@@ -111,9 +116,9 @@ class FavoriteService extends AbstractController
             }
         }
     }
-    public function updateLikes($data){
-         $productId = $data->id;
-       // $productId = 1;
+    public function updateLikes($dataa){
+        $productId =  $dataa->id;
+       //$productId = 1;
         $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$productId]);
 
         $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->findBy(['product'=>$product,'liked'=>1]);
