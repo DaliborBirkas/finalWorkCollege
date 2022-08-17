@@ -38,7 +38,7 @@ class CreateService
         date_default_timezone_set("Europe/Belgrade");
         $date = new \DateTime();
         $date->format('Y-m-d');
-        $timeInt = strtotime(date('Y-m-d H:i:s'))+ 600;
+        $timeInt = strtotime(date('Y-m-d H:i:s'))+ 20;
         $errors = [];
 
         if (!ctype_alpha($name)){

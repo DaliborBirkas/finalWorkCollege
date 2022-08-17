@@ -111,8 +111,8 @@ class FavoriteService extends AbstractController
         }
     }
     public function updateLikes($dataa){
+
         $productId =  $dataa->id;
-       //$productId = 1;
         $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$productId]);
 
         $favoriteProduct = $this->em->getRepository(FavoriteProduct::class)->findBy(['product'=>$product,'liked'=>1]);
@@ -124,7 +124,6 @@ class FavoriteService extends AbstractController
         if ($count!=0){
 
             if (empty($favorite)){
-                dump('if');
                 $newFavorite = new Favorite();
                 $newFavorite->setProduct($product);
                 $newFavorite->setLikes($count);
@@ -132,7 +131,6 @@ class FavoriteService extends AbstractController
                 $this->em->flush();
             }
             else{
-                dump('else');
                 $favorite->setLikes($count);
                 $this->em->persist($favorite);
                 $this->em->flush();

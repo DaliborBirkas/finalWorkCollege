@@ -32,6 +32,7 @@ class UserController extends AbstractController
     #[Route('/user/create', name: 'app_user_create',methods: 'POST')]
     public function registration(Request $request): JsonResponse
     {
+
         $dataDecoded = json_decode($request->getContent());
         $data = $this->createService->createUser($dataDecoded);
         if (empty($data)){
@@ -144,6 +145,13 @@ class UserController extends AbstractController
         $data = json_decode($request->getContent());
         $user = $this->getUser();
         $message = $changePasswordService->updatePassword($data,$user);
+        return $this->json($message,Response::HTTP_OK);
+
+    }
+    #[Route('/emails', name: 'emails')]
+    public function emails(UserRepository $userRepository)
+    {
+        dd($userRepository->emails());
         return $this->json($message,Response::HTTP_OK);
 
     }

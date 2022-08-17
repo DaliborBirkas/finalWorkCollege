@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<body>
+<div class="body">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="header text-center">
+                    <a href="{{ url('app_home') }}">
+                        <img src="{{ email.image('@images/koza.jpg') }}" width="400px" height="200px" class="logo" alt="Picture">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <h1 class="text-center">Postovani {{ name }},</h1>
+            <p class="block">
+
+                Uspesno ste se promenili podatke na sajtu <strong>Kozne galenterije</strong>.
+                <br><br>
+                Da bi ste bili u mogucnosti da porucujete potrebno je da verifikujete vasu
+                email adresu klikom na tekst (KLIKNI ME) ispod ovog teksta.<b>↓</b><br>
+                <a href="{{ url('app_user_verify_email',{ 'email': emailAddress, 'expires': expires })}} ">KLIKNI ME</a>
+                <br>
+
+            <h4>Kozna galenterija</h4>
+            <h4>Dalibor</h4>
+            <h4>+38564655456</h4>
+            </p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -12,7 +12,6 @@ class VerifyUserService extends AbstractController
 
     }
     public function verifyUser($id){
-        $id = 128;
 
         $user = $this->em->getRepository(User::class)->findOneBy(['id'=>$id]);
 

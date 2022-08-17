@@ -77,6 +77,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
                 ':verified'=> self::VERIFIED
             ]);
     }
+    public function emails(){
+        return $this->createQueryBuilder('u')
+            ->select('u.email')
+            ->andWhere('u.isEmailVerified = :verified')
+            ->setParameters([
+                ':verified'=>true
+            ])->getQuery()->execute();
+
+    }
 
 //    /**
 //     * @return User[] Returns an array of User objects

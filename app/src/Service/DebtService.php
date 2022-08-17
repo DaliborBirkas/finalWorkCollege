@@ -21,9 +21,11 @@ class DebtService extends AbstractController
         foreach ($users as $user){
             $total = 0;
             $orders = $this->em->getRepository(Order::class)->findBy(['userId'=> $user,'paid'=>false]);
+
             foreach ($orders as $order){
                 $total = $total + $order->getPrice();
             }
+
             $debt = $this->em->getRepository(Debt::class)->findOneBy(['user'=>$user]);
             if ($debt){
                 $debt->setAmount($total);

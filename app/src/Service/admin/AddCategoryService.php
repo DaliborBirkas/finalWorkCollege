@@ -11,18 +11,18 @@ class AddCategoryService extends AbstractController
     public function __construct( private  readonly EntityManagerInterface $em){
 
     }
-    public function addCategory($name,){
-        $status = 'Success';
-        if (!ctype_alpha($name)){
-            $status ='Declined';
+    public function addCategory($data){
 
-        }
-        else{
-            $category = new Category();
-            $category->setName($name);
-            $this->em->persist($category);
-            $this->em->flush();
-        }
+        $name = $data->name;
+        $imageName = $data->image;
+
+        $status = 'Success';
+        $category = new Category();
+        $category->setName($name);
+        $category->setImage($imageName);
+        $this->em->persist($category);
+        $this->em->flush();
+
 
         return $status;
     }

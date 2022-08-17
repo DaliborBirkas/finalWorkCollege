@@ -9,16 +9,23 @@ use App\Entity\Random;
 use App\Entity\User;
 use Doctrine\DBAL\Exception\DatabaseDoesNotExist;
 use Doctrine\ORM\EntityManagerInterface;
+//use http\Client;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\Notifier\Bridge\Twilio\TwilioTransport;
+use Symfony\Component\Notifier\TexterInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\favorite\FavoriteService;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
+use Symfony\Component\Notifier\Message\SmsMessage;
+use Twilio\Rest\Client;
+
 
 class FavoriteController extends AbstractController
 {
@@ -32,6 +39,10 @@ class FavoriteController extends AbstractController
         $this->tokenStorageInterface = $tokenStorageInterface;
     }
 
+    /**
+     * @throws \Twilio\Exceptions\TwilioException
+     * @throws \Twilio\Exceptions\ConfigurationException
+     */
     #[Route('/api/favorite', name: 'app_favorite',methods: ['get','post'])]
     public function favorite(Request $request,FavoriteService $favoriteService): JsonResponse
     {
@@ -46,6 +57,22 @@ class FavoriteController extends AbstractController
 //        $jwtHeader = json_decode($tokenHeader);
 //        $jwtPayload = json_decode($tokenPayload);
         //$jwtToken = $this->JWTEncoder->decode($token);
+        $sid = 'AC2a4a1de0e344520c50dd5cc1df681ff4';
+        $token = '52a0dcd7e06e9432ff0a88645f4c24c9';
+        $client = new Client($sid, $token);
+        //$m = new SmsMessage()
+// Use the client to do fun stuff like send text messages!
+        $client->messages->create(
+        // the number you'd like to send the message to
+            '+381616967616',
+            [
+                // A Twilio phone number you purchased at twilio.com/console
+                'from' => '+14054517789',
+                // the body of the text message you'd like to send
+                'body' => 'Aaaa'
+            ]
+        );
+
         $user = $this->getUser();
 
         $data = json_decode($request->getContent());

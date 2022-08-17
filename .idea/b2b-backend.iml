@@ -114,6 +114,11 @@
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/phenx/php-font-lib" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/sabberworm/php-css-parser" />
       <excludeFolder url="file://$MODULE_DIR$/app/vendor/h4cc/wkhtmltopdf-amd64" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/notifier" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/twilio-notifier" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/http-client-contracts" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/symfony/http-client" />
+      <excludeFolder url="file://$MODULE_DIR$/app/vendor/twilio/sdk" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

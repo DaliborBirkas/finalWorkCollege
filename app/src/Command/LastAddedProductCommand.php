@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\User;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,6 +44,13 @@ class LastAddedProductCommand extends Command
         $date = $date->modify( '-1 day' );
         $products = $this->em->getRepository(Product::class)->findBy(['datum'=>$date]);
         $newProducts = [];
+
+        $users = $this->em->getRepository(User::class)->findAll();
+        //$users = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true]);
+        $emails = [];
+        foreach ($users as $user){
+            $emails[] = $user->getEmail();
+        }
         foreach ($products as $product){
             $eachProduct = [];
             $productName = $product->getName();
@@ -64,14 +72,17 @@ class LastAddedProductCommand extends Command
 
         }
         if(!empty($newProducts)){
-            $email = (new TemplatedEmail())
-                ->to('dbirkas3@gmail.com')
+            foreach ($emails as $email){
+            $send = (new TemplatedEmail())
+                ->to($email)
                 ->subject('Proizvodi dodati u poslednjih 24h')
                 ->htmlTemplate('newProducts/newProducts.html.twig')
                 ->context([
                     'products'=>$newProducts
                 ]);
-            $this->mailerService->send($email);
+            $this->mailerService->send($send);
+            }
+
         }
 
         $io->success('Sending emails, with last added product.');

@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -39,6 +40,12 @@ class SendNewsletterCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $products = $this->em->getRepository(Product::class)->findBy(array(),array('discountPrice'=>'DESC'),5);
         $topFiveProducts = [];
+        $users = $this->em->getRepository(User::class)->findAll();
+        //$users = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true]);
+        $emails = [];
+        foreach ($users as $user){
+            $emails[] = $user->getEmail();
+        }
         foreach ($products as $product){
             $eachProduct = [];
             $productName = $product->getName();
@@ -50,24 +57,31 @@ class SendNewsletterCommand extends Command
             $category = $this->em->getRepository(Category::class)->findOneBy(['id'=>$product->getCategory()]);
             $categortName = $category->getName();
 
-            $eachProduct['name'] = $productName;
-            $eachProduct['description'] = $productDescription;
-            $eachProduct['oldPrice'] = $productOldPrice;
-            $eachProduct['newPrice'] = $productNewPrice;
-            $eachProduct['balance'] = $productBalance;
-            $eachProduct['categoryName'] = $categortName;
-            $topFiveProducts[] =$eachProduct;
+            if($productNewPrice!=0.00){
+                $eachProduct['name'] = $productName;
+                $eachProduct['description'] = $productDescription;
+                $eachProduct['oldPrice'] = $productOldPrice;
+                $eachProduct['newPrice'] = $productNewPrice;
+                $eachProduct['balance'] = $productBalance;
+                $eachProduct['categoryName'] = $categortName;
+                $topFiveProducts[] =$eachProduct;
+            }
+
+
 
         }
+        foreach ($emails as $email){
 
         $email = (new TemplatedEmail())
-            ->to('dbirkas3@gmail.com')
+            ->to($email)
             ->subject('Izdvajamo top proizvode sa cenom na popustu')
             ->htmlTemplate('newsletter/newsletter.html.twig')
             ->context([
                 'products'=>$topFiveProducts
             ]);
         $this->mailerService->send($email);
+
+        }
 
 
 

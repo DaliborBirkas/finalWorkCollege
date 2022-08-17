@@ -2,7 +2,11 @@
 
 namespace App\Command;
 
+use App\Entity\Logs;
+use App\Entity\User;
+use App\Repository\LogsRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,9 +22,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class UserExpiredCommand extends Command
 {
     private $userRepository;
-    public function __construct(UserRepository $userRepository, string $name = null)
+    private $logsRepository;
+    public function __construct(private  readonly EntityManagerInterface $em,UserRepository $userRepository,
+                                LogsRepository $logsRepository, string $name = null)
     {
         $this->userRepository = $userRepository;
+        $this->logsRepository = $logsRepository;
         parent::__construct($name);
     }
 
@@ -40,7 +47,20 @@ class UserExpiredCommand extends Command
             $io->note('Dry mode enabled');
             $count = $this->userRepository->countExpired();
         }else{
-            $count = $this->userRepository->deleteExpired();
+            $timeInt = strtotime(date('Y-m-d H:i:s'));
+            $users = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>false]);
+            $count = 0;
+            foreach ($users as $user){
+                if ($user->getVerificationExpire()<$timeInt){
+                    $logs = $this->em->getRepository(Logs::class)->findBy(['user'=>$user]);
+                    foreach ($logs as $log){
+                        $this->logsRepository->remove($log);
+                        $this->em->flush();
+                    }
+                    $count = $this->userRepository->deleteExpired();
+                }
+            }
+
         }
 
 //        $arg1 = $input->getArgument('arg1');

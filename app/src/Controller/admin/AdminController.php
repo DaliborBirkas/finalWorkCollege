@@ -2,7 +2,11 @@
 
 namespace App\Controller\admin;
 
+use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,22 +14,32 @@ use App\Service\admin\VerifyUserService;
 use App\Service\admin\AddCategoryService;
 use App\Service\admin\AddProductService;
 
+
 class AdminController extends AbstractController
 {
-    #[Route('/admin/verifyUser', name: 'app_admin_verify_user')]
-    public function verifyUser(Request $request, VerifyUserService $verifyUserService)
+    public function __construct(private  readonly EntityManagerInterface $em){
+
+    }
+    //#[IsGranted('ROLE_ADMIN')]
+    #[Route('/api/admin/users/verify', name: 'app_admin_users_verify')]
+    public function verifyUser(Request $request, VerifyUserService $verifyUserService):JsonResponse
     {
-        $verifyUserService->verifyUser(3);
+        $data = json_decode($request->getContent());
+        $id = $data->id;
+        $verifyUserService->verifyUser($id);
         return $this->json('Success',RESPONSE::HTTP_OK);
     }
-    #[Route('/admin/add/category', name: 'app_admin_add_category')]
-    public function addCategory(Request $request,AddCategoryService $addCategoryService){
-        $name = "Kategorija 2";
-        $status= $addCategoryService->addCategory($name);
+    #[Route('/api/admin/category/add', name: 'app_admin_category_add')]
+    public function addCategory(Request $request,AddCategoryService $addCategoryService):JsonResponse{
+
+        $data = json_decode($request->getContent());
+
+        $status= $addCategoryService->addCategory($data);
+
         return $this->json($status,RESPONSE::HTTP_OK);
     }
-    #[Route('/admin/add/product', name: 'app_admin_add_product')]
-    public function addProduct(Request $request, AddProductService $addProductService){
+    #[Route('/api/admin/product/add', name: 'app_admin_product_add')]
+    public function addProduct(Request $request, AddProductService $addProductService):JsonResponse{
         $data = json_decode($request->getContent());
 
         $idCategory = 2;
@@ -37,6 +51,45 @@ class AdminController extends AbstractController
 
         $addProductService->addProduct($idCategory,$name,$description,$price,$balance,$image);
         return $this->json('Success',RESPONSE::HTTP_OK);
+    }
+
+    // ALL USERS
+    #[Route('/api/admin/users', name: 'app_admin_users')]
+    public function users(Request $request):JsonResponse
+    {
+        $data = $this->em->getRepository(User::class)->findAll();
+        return $this->json($data,RESPONSE::HTTP_OK);
+    }
+
+    //USERS VERIFIED EMAIL
+    #[Route('/api/admin/users/emailVerified', name: 'app_admin_users_emailVerified')]
+    public function emailVerified(Request $request):JsonResponse
+    {
+        $data = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true]);
+        return $this->json($data,RESPONSE::HTTP_OK);
+    }
+
+    // USERS EMAIL NOT VERIFIED
+    #[Route('/api/admin/users/emailNotVerified', name: 'app_admin_users_emailNotVerified')]
+    public function emailNotVerified(Request $request):JsonResponse
+    {
+        $data = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>false]);
+        return $this->json($data,RESPONSE::HTTP_OK);
+    }
+
+    //USERS FULL VERIFIED
+    #[Route('/api/admin/users/verified', name: 'app_admin_users_verified')]
+    public function verified(Request $request):JsonResponse
+    {
+        $data = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true,'is_verified'=>true]);
+        return $this->json($data,RESPONSE::HTTP_OK);
+    }
+    //USERS FULL VERIFIED
+    #[Route('/api/admin/users/emailVerifiedAdminNot', name: 'app_admin_users_emailVerifiedAdminNot')]
+    public function adminVerification(Request $request):JsonResponse
+    {
+        $data = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true,'is_verified'=>false]);
+        return $this->json($data,RESPONSE::HTTP_OK);
     }
 
 

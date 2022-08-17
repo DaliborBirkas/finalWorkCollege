@@ -26,7 +26,9 @@ class UpdateInformationsService
         $pib = 312;
         $cityINT = 1;
 
-        $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
+        $newMail = "koznagalenterija@gmail.com";
+
+       // $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$newMail]);
         if (!ctype_alpha($name)){
             $errors['error-name'] ='Name can only contain letters';
 
@@ -63,7 +65,7 @@ class UpdateInformationsService
 
             $city = $this->em->getRepository(City::class)->find($cityINT);
             if ($email!=$user->getEmail()){
-
+                //dd('aa');
                 $timeInt = strtotime(date('Y-m-d H:i:s'))+ 600;
                 $user->setName($name);
                 $user->setSurname($surname);
@@ -73,7 +75,7 @@ class UpdateInformationsService
                 $user->setPib($pib);
                 $user->setCity($city);
                 $user->setEmail($email);
-                $user->setssEmailVerified(0);
+                $user->setisEmailVerified(0);
                 $user->setverificationExpire($timeInt);
                 $this->em->persist($user);
                 $this->em->flush();
@@ -89,8 +91,8 @@ class UpdateInformationsService
 
                 $emailSendVerification = (new TemplatedEmail())
                     ->to($email)
-                    ->subject('Uspesna registracija')
-                    ->htmlTemplate('mail/verifyEmail.html.twig')
+                    ->subject('Obavestenje - Uspesna promena podataka')
+                    ->htmlTemplate('mail/mailConfirmation.html.twig')
                     ->context([
                         'name'=>$name,
                         'emailAddress'=>$email,
