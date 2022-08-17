@@ -105,6 +105,7 @@ class UpdateInformationsService
                 return 'Success';
             }
             else{
+
                 $user->setName($name);
                 $user->setSurname($surname);
                 $user->setCompanyName($companyName);
