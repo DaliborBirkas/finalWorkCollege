@@ -16,7 +16,7 @@ use App\Service\admin\VerifyUserService;
 use App\Service\admin\AddCategoryService;
 use App\Service\admin\AddProductService;
 
-
+#[IsGranted('ROLE_ADMIN')]
 class AdminController extends AbstractController
 {
     public function __construct(private  readonly EntityManagerInterface $em){
@@ -27,7 +27,8 @@ class AdminController extends AbstractController
     public function verifyUser(Request $request, VerifyUserService $verifyUserService):JsonResponse
     {
         $data = json_decode($request->getContent());
-        $id = $data->id;
+       // $id = $data->id;
+        $id =1;
         $verifyUserService->verifyUser($id);
         return $this->json('Success',RESPONSE::HTTP_OK);
     }
