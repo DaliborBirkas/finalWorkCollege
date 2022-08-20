@@ -32,7 +32,7 @@ class AdminController extends AbstractController
         $verifyUserService->verifyUser($id);
         return $this->json('Success',RESPONSE::HTTP_OK);
     }
-    #[Route('/api/admin/category/add', name: 'app_admin_category_add')]
+    #[Route('/api/admin/category/add', name: 'app_admin_category_add', methods: 'post')]
     public function addCategory(Request $request,AddCategoryService $addCategoryService):JsonResponse{
 
         $data = json_decode($request->getContent());
@@ -41,18 +41,10 @@ class AdminController extends AbstractController
 
         return $this->json($status,RESPONSE::HTTP_OK);
     }
-    #[Route('/api/admin/product/add', name: 'app_admin_product_add')]
+    #[Route('/api/admin/product/add', name: 'app_admin_product_add', methods: 'post')]
     public function addProduct(Request $request, AddProductService $addProductService):JsonResponse{
         $data = json_decode($request->getContent());
-
-        $idCategory = 2;
-        $name = "proizvod";
-        $description = "opis";
-        $price = 222.99;
-        $balance = 2444;
-        $image = "333.jpg";
-
-        $addProductService->addProduct($idCategory,$name,$description,$price,$balance,$image);
+        $addProductService->addProduct($data);
         return $this->json('Success',RESPONSE::HTTP_OK);
     }
 

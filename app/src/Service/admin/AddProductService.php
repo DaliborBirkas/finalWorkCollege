@@ -12,8 +12,14 @@ class AddProductService extends AbstractController
     public function __construct( private  readonly EntityManagerInterface $em){
 
     }
-    public function addProduct($id,$name,$description,$price,$balance,$image){
-
+    public function addProduct($data){
+        $currentDate = date_create('now');
+        $id = $data->categoryId;
+        $name = $data->name;
+        $description = $data->description;
+        $price = $data->price;
+        $balance = $data->balance;
+        $image = $data->image;
         $category = $this->em->getRepository(Category::class)->findOneBy(['id'=>$id]);
 
         $product = new Product();
@@ -23,6 +29,8 @@ class AddProductService extends AbstractController
         $product->setPrice($price);
         $product->setBalance($balance);
         $product->setImage($image);
+        $product->setDiscountPrice(0.00);
+        $product->setDatum($currentDate);
 
         $this->em->persist($product);
         $this->em->flush();

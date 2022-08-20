@@ -65,9 +65,7 @@ class UserController extends AbstractController
                     <h4>+38564655456</h4>                
                     ");
         $this->mailer->send($email);
-        return $this->json([
-            'status'=>'Verification done'
-        ]);
+        return $this->redirect('http://localhost:4200/');
 
     }
     if ($verification == "you are already verified"){
@@ -85,9 +83,7 @@ class UserController extends AbstractController
                     <h4>+38564655456</h4>                
                     ");
         $this->mailer->send($email);
-        return $this->json([
-            'status'=>'User already verified'
-        ]);
+        return $this->redirect('http://localhost:4200/');
     }
     if ($verification == "could not verify email"){
         $email = (new Email())
@@ -105,14 +101,10 @@ class UserController extends AbstractController
                     <h4>+38564655456</h4>                
                     ");
         $this->mailer->send($email);
-        return $this->json([
-            'status'=>'Error doctrine'
-        ]);
+        return $this->redirect('http://localhost:4200/');
     }
     else{
-        return $this->json([
-            'status'=>'Error'
-        ]);
+        return $this->redirect('http://localhost:4200/');
     }
     }
     #[Route('api/me', methods: 'GET')]
@@ -129,7 +121,7 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/user/update', name: 'app_user_update')]
+    #[Route('/api/user/update', name: 'app_user_update', methods: 'patch')]
     public function updateInformation(Request $request, UpdateInformationsService $updateInformationsService)
     {
         $user = $this->getUser();

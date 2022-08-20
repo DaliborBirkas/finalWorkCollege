@@ -32,18 +32,17 @@ class ResetPasswordController extends AbstractController
        // $email = "pero68505@gmail.com";
         $email = $data->email;
 
-        $data = json_decode($request->getContent());
-       // $email = $data->email;
         $emailReset =$this->em->getRepository(ResetPassword::class)->findBy(['email'=>$email]);
         $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
-        $userName = $user->getName();
-        $userLastname = $user->getSurname();
         if (empty($user)){
             return $this->json([
                 'status'=>'User with this email does not exists'
             ]);
         }
+
         else{
+            $userName = $user->getName();
+            $userLastname = $user->getSurname();
         if (empty($emailReset)){
             $resetPw->setEmail($email);
             $resetPw->setExpire($timeInt);
@@ -57,6 +56,8 @@ class ResetPasswordController extends AbstractController
                     <h2>Postovani $userName $userLastname</h2><br>
                     <h4>Vas zahtev za novu lozinku je kreiran</h4>   
                     <p>Vas kod za promenu lozinke je<b> $rand</b></p>
+                    <p>Kliknite na klikni me kako bi ste promenili lozinku</p>
+                    <a href='http://localhost:4200/restartPassword'>Klikni me</a>
                     <p>Zahtev je validan 10 minuta</p>
                     <br>
 
@@ -85,6 +86,8 @@ class ResetPasswordController extends AbstractController
                     <h4> Kreirali smo novi zahtev za promenu lozinke</h4>   
                     <p>Vas kod je $rand2</p>
                     <p>Zahtev je validan 10 minuta, po isteku 10 minuta potrebno je obnoviti zahtev</p>
+                     <p>Kliknite na klikni me kako bi ste promenili lozinku</p>
+                    <a href='http://localhost:4200/restartPassword'>Klikni me</a>
                     <br>
                     <h4>Kozna galenterija</h4>
                     <h4>Dalibor</h4>
@@ -100,27 +103,21 @@ class ResetPasswordController extends AbstractController
         }}
 
     }
-    #[Route('/reset/password/change', name: 'app_reset_password_change')]
+    #[Route('/reset/password/change', name: 'app_reset_password_change', methods: 'post')]
     public function resetPassword(Request $request)
     {
-        $data = json_decode($request->getContent());
-        $email = "dbirkas3@gmail.com";
-        $validator = "fff88";
+
         $timeInt = strtotime(date('Y-m-d H:i:s'));
-
-        $password = "test200";
-        $passwordRepeated = "test200";
-
         $data = json_decode($request->getContent());
-      //  $email = $data->email;
-       // $validator = $data->validator;
-      //  $password = $data->password;
-      //  $passwordRepeated = $data->passwordRepeated;
+        $email = $data->email;
+        $validator = $data->kod;
+        $password = $data->password;
+        $passwordRepeated = $data->repeatedPassword;
 
         $emailReset =$this->em->getRepository(ResetPassword::class)->findOneBy(['email'=>$email,'validator'=>$validator]);
         if (empty($emailReset)){
             return $this->json([
-                'status'=>'Email does not exists'
+                'status'=>'Email and validator are wrong!'
             ]);
         }
 

@@ -14,19 +14,15 @@ class UpdateInformationsService
 
     }
     public function update($data,$user){
-        // TO DO  READ DATA FROM JSON
-        //$email = $data->email;
 
-        $email = "dbirkas3@gmail.com";
-        $name = "Jankeza";
-        $surname = "Jankelaaas";
-        $companyName= "adasdsa";
-        $phoneNumber = 1231;
-        $address = "ulicascsa";
-        $pib = 312;
-        $cityINT = 1;
-
-        $newMail = "koznagalenterija@gmail.com";
+        $address = $data->address;
+        $cityINT = intval($data->city);
+        $companyName = $data->companyName;
+        $email = $data->email;
+        $name = $data->name;
+        $phoneNumber = intval($data->phoneNumber);
+        $pib = $data->pib;
+        $surname = $data->surname;
 
        // $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$newMail]);
         if (!ctype_alpha($name)){
@@ -92,7 +88,7 @@ class UpdateInformationsService
                 $emailSendVerification = (new TemplatedEmail())
                     ->to($email)
                     ->subject('Obavestenje - Uspesna promena podataka')
-                    ->htmlTemplate('mail/mailConfirmation.html.twig')
+                    ->htmlTemplate('mail/emailConfirmation.html.twig')
                     ->context([
                         'name'=>$name,
                         'emailAddress'=>$email,
@@ -115,7 +111,7 @@ class UpdateInformationsService
                 $user->setPib($pib);
                 $user->setPhoneNumber($phoneNumber);
                 $user->setCity($city);
-                $user->setEmail($email);
+              //  $user->setEmail($email);
                 $this->em->persist($user);
                 $this->em->flush();
                 $email = (new TemplatedEmail())
