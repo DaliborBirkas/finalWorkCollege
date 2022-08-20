@@ -29,8 +29,8 @@ class ResetPasswordController extends AbstractController
         // 10 minutes then expires
         $timeInt = strtotime(date('Y-m-d H:i:s'))+ 600;
         $message= "";
-        $email = "pero68505@gmail.com";
-        //$email = $data->email;
+       // $email = "pero68505@gmail.com";
+        $email = $data->email;
 
         $data = json_decode($request->getContent());
        // $email = $data->email;
@@ -84,6 +84,7 @@ class ResetPasswordController extends AbstractController
                     <h2>Postovani  $userName $userLastname </h2><br>
                     <h4> Kreirali smo novi zahtev za promenu lozinke</h4>   
                     <p>Vas kod je $rand2</p>
+                    <p>Zahtev je validan 10 minuta, po isteku 10 minuta potrebno je obnoviti zahtev</p>
                     <br>
                     <h4>Kozna galenterija</h4>
                     <h4>Dalibor</h4>
@@ -102,12 +103,13 @@ class ResetPasswordController extends AbstractController
     #[Route('/reset/password/change', name: 'app_reset_password_change')]
     public function resetPassword(Request $request)
     {
+        $data = json_decode($request->getContent());
         $email = "dbirkas3@gmail.com";
-        $validator = "dce5d";
+        $validator = "fff88";
         $timeInt = strtotime(date('Y-m-d H:i:s'));
 
-        $password = "testo";
-        $passwordRepeated = "testo";
+        $password = "test200";
+        $passwordRepeated = "test200";
 
         $data = json_decode($request->getContent());
       //  $email = $data->email;

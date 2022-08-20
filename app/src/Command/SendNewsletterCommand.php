@@ -70,8 +70,9 @@ class SendNewsletterCommand extends Command
 
 
         }
-        foreach ($emails as $email){
+        if (!empty($topFiveProducts)){
 
+        foreach ($emails as $email){
         $email = (new TemplatedEmail())
             ->to($email)
             ->subject('Izdvajamo top proizvode sa cenom na popustu')
@@ -81,6 +82,7 @@ class SendNewsletterCommand extends Command
             ]);
         $this->mailerService->send($email);
 
+        }
         }
 
 

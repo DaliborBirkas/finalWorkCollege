@@ -42,7 +42,6 @@ class UserExpiredCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-
         if ($input->getOption('dry-run')){
             $io->note('Dry mode enabled');
             $count = $this->userRepository->countExpired();

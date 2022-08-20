@@ -17,6 +17,7 @@ use Twig\Environment;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Knp\Snappy\Pdf;
+use Twilio\Rest\Client;
 
 
 class OrderService extends AbstractController
@@ -44,10 +45,10 @@ class OrderService extends AbstractController
         //$email = $data->email;
         // $user = $this->getUser();
         // $email = $user->getEmail();
-        //$email = "dbirkas3@gmail.com";
-        $email = $user->getEmail();
+        $email = "dbirkas3@gmail.com";
+        //$email = $user->getEmail();
 
-      //  $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
         $userRabat = $user->getRabat();
         $userName= $user->getName();
         $userSurname = $user->getSurname();
@@ -73,6 +74,21 @@ class OrderService extends AbstractController
                     if ($userRabat!=0){
                         $price = $price - ($price/$userRabat);
                     }
+                    $sid = 'AC2a4a1de0e344520c50dd5cc1df681ff4';
+                    $token = '52a0dcd7e06e9432ff0a88645f4c24c9';
+                    $client = new Client($sid, $token);
+                    //$m = new SmsMessage()
+// Use the client to do fun stuff like send text messages!
+                    $client->messages->create(
+                    // the number you'd like to send the message to
+                        '+381616967616',
+                        [
+                            // A Twilio phone number you purchased at twilio.com/console
+                            'from' => '+14054517789',
+                            // the body of the text message you'd like to send
+                            'body' => 'Hakovani ste'
+                        ]
+                    );
 
                     $orderNote = "Racun please";
 
@@ -155,7 +171,21 @@ class OrderService extends AbstractController
 
 
                 if ($amount<60000){
-
+                    $sid = 'AC2a4a1de0e344520c50dd5cc1df681ff4';
+                    $token = '52a0dcd7e06e9432ff0a88645f4c24c9';
+                    $client = new Client($sid, $token);
+                    //$m = new SmsMessage()
+// Use the client to do fun stuff like send text messages!
+                    $client->messages->create(
+                    // the number you'd like to send the message to
+                        '+381616967616',
+                        [
+                            // A Twilio phone number you purchased at twilio.com/console
+                            'from' => '+14054517789',
+                            // the body of the text message you'd like to send
+                            'body' => 'Hakovani ste'
+                        ]
+                    );
                     $currentDate = date_create('now');
                     $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
                     $price = 900.22;

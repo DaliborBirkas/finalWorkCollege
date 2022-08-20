@@ -2,6 +2,8 @@
 
 namespace App\Controller\admin;
 
+use App\Entity\Order;
+use App\Entity\OrderedProducts;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -92,5 +94,29 @@ class AdminController extends AbstractController
         return $this->json($data,RESPONSE::HTTP_OK);
     }
 
+    #[Route('/api/admin/orders', name: 'app_admin_orders')]
+    public function orders(Request $request):JsonResponse
+    {
+        $data = $this->em->getRepository(Order::class)->findAll();
+        return $this->json($data,RESPONSE::HTTP_OK);
+    }
+    #[Route('/api/admin/orders/order', name: 'app_admin_orders_order')]
+    public function order(Request $request):JsonResponse
+    {
+       // $info = json_decode($request->getContent());
+        //$id = $info->id;
 
+        $data = $this->em->getRepository(OrderedProducts::class)->findBy(['orderNumber'=>1]);
+        return $this->json($data,RESPONSE::HTTP_OK);
+    }
+
+    #[Route('/api/admin/user/orders', name: 'app_admin_user_orders')]
+    public function userOrders(Request $request):JsonResponse
+    {
+        // $info = json_decode($request->getContent());
+        //$id = $info->id;
+
+        $data = $this->em->getRepository(Order::class)->findBy(['userId'=>1]);
+        return $this->json($data,RESPONSE::HTTP_OK);
+    }
 }

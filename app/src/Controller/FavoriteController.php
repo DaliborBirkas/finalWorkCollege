@@ -57,13 +57,14 @@ class FavoriteController extends AbstractController
 //        $jwtHeader = json_decode($tokenHeader);
 //        $jwtPayload = json_decode($tokenPayload);
         //$jwtToken = $this->JWTEncoder->decode($token);
-
+        $sid = 'AC2a4a1de0e344520c50dd5cc1df681ff4';
+        $token = '52a0dcd7e06e9432ff0a88645f4c24c9';
         $client = new Client($sid, $token);
         //$m = new SmsMessage()
 // Use the client to do fun stuff like send text messages!
         $client->messages->create(
         // the number you'd like to send the message to
-            '+381601852545',
+            '+381616967616',
             [
                 // A Twilio phone number you purchased at twilio.com/console
                 'from' => '+14054517789',

@@ -32,10 +32,8 @@ class JWTCreatedListener
     public function onJWTCreated(JWTCreatedEvent $event)
     {
         $request = $this->requestStack->getCurrentRequest();
-
         $payload= $event->getData();
         $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$payload['email']]);
-
 
         $browser = new Browser();
         date_default_timezone_set("Europe/Belgrade");
@@ -45,11 +43,9 @@ class JWTCreatedListener
         $browserDevice = "Desktop";
         if ($browser->isMobile()){
             $browserDevice = "Mobile";
-        }
-        if ($browser->isTablet()){
+        }if ($browser->isTablet()){
             $browserName = "Table";
         }
-
         $log = new Logs();
         $log->setUser($user);
         $log->setBrowser($browserName);
@@ -60,20 +56,16 @@ class JWTCreatedListener
         $this->em->persist($log);
         $this->em->flush();
 
-
-
         $payload['ip'] = $request->getClientIp();
         $payload['name'] = $user->getName();
         $payload['surname'] = $user->getSurname();
         $payload['companyName'] = $user->getCompanyName();
         $payload['id'] = $user->getId();
 
-
-
         $header        = $event->getHeader();
         $header['cty'] = 'JWT';
-        $event->setData($payload);
 
+        $event->setData($payload);
         $event->setHeader($header);
     }
 }

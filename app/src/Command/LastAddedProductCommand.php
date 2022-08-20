@@ -46,7 +46,7 @@ class LastAddedProductCommand extends Command
         $newProducts = [];
 
         $users = $this->em->getRepository(User::class)->findAll();
-        //$users = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true]);
+
         $emails = [];
         foreach ($users as $user){
             $emails[] = $user->getEmail();
@@ -57,7 +57,6 @@ class LastAddedProductCommand extends Command
             $productDescription = $product->getDescription();
             $productOldPrice = $product->getPrice();
             $productBalance = $product->getBalance();
-            $productNewPrice = $product->getDiscountPrice();
 
             $category = $this->em->getRepository(Category::class)->findOneBy(['id'=>$product->getCategory()]);
             $categortName = $category->getName();
@@ -65,7 +64,6 @@ class LastAddedProductCommand extends Command
             $eachProduct['name'] = $productName;
             $eachProduct['description'] = $productDescription;
             $eachProduct['oldPrice'] = $productOldPrice;
-           // $eachProduct['newPrice'] = $productNewPrice;
             $eachProduct['balance'] = $productBalance;
             $eachProduct['categoryName'] = $categortName;
             $newProducts[] =$eachProduct;
