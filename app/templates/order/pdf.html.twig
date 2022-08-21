@@ -1,5 +1,21 @@
 <!doctype html>
 <html lang="en">
+<head>
+  <title>
+    Predracun
+  </title>
+  <style>
+    table, th {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    td {
+      text-align: center;
+      border-bottom: 1px solid black;
+    }
+
+  </style>
+</head>
 <body>
 <div class="body">
   <h1 align="left">Kozna galenterija D.O.O.</h1>
@@ -17,9 +33,26 @@
     PIB:{{ pib}} </p>
   <h3 align="center">PREDRACUN BROJ: {{ idOrder }}</h3>
   <p>Dan porudzbine: <strong>{{ orderDate}}</strong> </p>
-
-
-  <p align="left">Napomena:</p>
+  <p>Broj porudzbine: <strong>{{ idOrder}}</strong> </p>
+  <table align="center" style="font-size: 20px">
+    <tr>
+      <th>Proizvod</th>
+      <th>Kategorija</th>
+      <th>Cena izrazena u RSD</th>
+      <th>Kolicina</th>
+    </tr>
+    {% for product in products%}
+      <tr>
+        {% for values in product %}
+          <td>{{ values }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+  <p align="left">Ukupna cena bez popustom: <strong>{{ totalWithoutRabat }}</strong> RSD</p>
+  <p align="left">Popust <strong>{{ rabat }} %</strong></p>
+  <p align="left">Ukupna cena sa popustom: <strong>{{ total }}</strong> RSD</p>
+  <p align="left">Napomena: {{ note }}</p>
   <p align="left">Mozete porucivati proizvode sve dok je vas dug ispod 60000 dinara</p>
   <br>
   <p>Smernice za placanje putem banke/uplatnice:</p>

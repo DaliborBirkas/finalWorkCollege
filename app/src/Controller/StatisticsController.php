@@ -17,7 +17,7 @@ class StatisticsController extends AbstractController
     public function __construct(private readonly EntityManagerInterface $em){
 
     }
-    #[Route('/statistics', name: 'app_statistics',methods: 'GET')]
+    #[Route('/api/user/statistics', name: 'app_statistics',methods: 'GET')]
     public function statistics(): Response
     {
       $email = "dbirkas3@gmail.com";
@@ -49,10 +49,10 @@ class StatisticsController extends AbstractController
       return $this->json($dataAll,Response::HTTP_OK);
     }
 
-    #[Route('/statistics/order', name: 'app_statistics_order',methods: 'GET')]
+    #[Route('/api/user/statistics/order', name: 'app_statistics_order',methods: 'GET')]
     public function statisticsOrder(): Response
     {
-        $id = 16;
+        $id = 1;
         date_default_timezone_set("Europe/Belgrade");
 
 //        $browser = new Browser();
@@ -75,5 +75,6 @@ class StatisticsController extends AbstractController
         return $this->json($dataAll,Response::HTTP_OK);
 
     }
+
 
 }

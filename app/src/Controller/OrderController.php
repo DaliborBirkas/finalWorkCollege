@@ -14,7 +14,7 @@ class OrderController extends AbstractController
     public function __construct( private readonly OrderService $orderService)
     {
     }
-    #[Route('/order/create', name: 'app_order')]
+    #[Route('/api/user/order/create', name: 'app_order',methods: 'post')]
     public function index(Request $request): Response
     {
        $data = json_decode($request->getContent());
@@ -22,16 +22,7 @@ class OrderController extends AbstractController
         $user = $this->getUser();
        $order =  $this->orderService->createOrder($data,$user);
 
-      if(empty($order)){
-          return $this->json('Can not create order',Response::HTTP_OK);
-      }
-      if ($order = 'Amount not valid'){
-          return  $this->json('Over limit, pay debt');
-      }
-      else{
-          $this->orderService->storeOrderedProducts($order);
-          return $this->json('Success',Response::HTTP_OK);
-      }
+       return $this->json($order, Response::HTTP_OK);
 
     }
 
