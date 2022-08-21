@@ -5,6 +5,7 @@ namespace App\Controller\admin;
 use App\Entity\Order;
 use App\Entity\OrderedProducts;
 use App\Entity\User;
+use App\Service\admin\SetRabatService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -111,5 +112,13 @@ class AdminController extends AbstractController
 
         $data = $this->em->getRepository(Order::class)->findBy(['userId'=>1]);
         return $this->json($data,RESPONSE::HTTP_OK);
+    }
+    #[Route('/api/admin/user/rabat', name: 'app_admin_user_orders')]
+    public function userRabat(Request $request, SetRabatService $rabatService):JsonResponse
+    {
+        $data = json_decode($request->getContent());
+        $user = $this->getUser();
+        $rabatService->setRabat($data,$user);
+        return $this->json('Success',Response::HTTP_OK);
     }
 }

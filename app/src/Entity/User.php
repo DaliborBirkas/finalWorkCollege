@@ -120,8 +120,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Logs::class)]
     private Collection $logs;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order2::class)]
-    private Collection $order2s;
+
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: FavoriteProduct::class)]
     private Collection $favoriteProducts;
@@ -130,7 +129,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->orders = new ArrayCollection();
         $this->logs = new ArrayCollection();
-        $this->order2s = new ArrayCollection();
         $this->favoriteProducts = new ArrayCollection();
     }
 
@@ -433,35 +431,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Order2>
-     */
-    public function getOrder2s(): Collection
-    {
-        return $this->order2s;
-    }
 
-    public function addOrder2(Order2 $order2): self
-    {
-        if (!$this->order2s->contains($order2)) {
-            $this->order2s->add($order2);
-            $order2->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder2(Order2 $order2): self
-    {
-        if ($this->order2s->removeElement($order2)) {
-            // set the owning side to null (unless already changed)
-            if ($order2->getUser() === $this) {
-                $order2->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, FavoriteProduct>
