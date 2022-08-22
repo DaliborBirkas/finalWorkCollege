@@ -87,7 +87,7 @@ class ProductController extends AbstractController
 //
 //        }
 //        dd($topFiveProducts);
-        $products =$this->em->getRepository(Product::class)->findBy(array(),array('price'=>'ASC'),5);
+        $products =$this->em->getRepository(Product::class)->findBy(array(),array('price'=>'ASC'),4);
         $data = [];
         $categoryArray = [];
         foreach ($products as $key=>$product){

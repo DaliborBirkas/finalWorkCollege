@@ -88,11 +88,34 @@ class AdminController extends AbstractController
         return $this->json($data,RESPONSE::HTTP_OK);
     }
 
-    #[Route('/api/admin/orders', name: 'app_admin_orders')]
+    #[Route('/api/admin/orders', name: 'app_admin_orders',methods: 'get')]
     public function orders(Request $request):JsonResponse
     {
-        $data = $this->em->getRepository(Order::class)->findAll();
-        return $this->json($data,RESPONSE::HTTP_OK);
+        $orders = $this->em->getRepository(Order::class)->findAll();
+
+        $dataAll = [];
+
+        foreach ($orders as $order){
+            $paid = 'ne';
+            $sent = 'ne';
+
+            if ($order->isPaid()){
+                $paid = 'da';
+            }
+            if ($order->isSent()){
+                $sent = 'da';
+            }
+
+            $data = [
+                'orderNumber'=>$order->getId(),
+                'orderNote'=>$order->getOrderNote(),
+                'sent'=>$sent,
+                'totalPrice'=>$order->getPrice(),
+                'paid'=>$paid
+            ];
+            $dataAll[]= $data;
+        }
+        return $this->json($dataAll,Response::HTTP_OK);
     }
     #[Route('/api/admin/orders/order', name: 'app_admin_orders_order')]
     public function order(Request $request):JsonResponse

@@ -26,14 +26,14 @@ class StatisticsController extends AbstractController
       $dataAll = [];
 
       foreach ($orders as $order){
-          $paid = 'no';
-          $sent = 'no';
+          $paid = 'ne';
+          $sent = 'ne';
 
           if ($order->isPaid()){
-              $paid = 'yes';
+              $paid = 'da';
           }
           if ($order->isSent()){
-              $sent = 'yes';
+              $sent = 'da';
           }
 
           $data = [

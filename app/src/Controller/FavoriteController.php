@@ -52,24 +52,27 @@ class FavoriteController extends AbstractController
         $favoriteService->updateLikes($data);
         return $this->json('Success');
     }
-    #[Route('/favorite/get', name: 'app_favorite_get')]
+    #[Route('/favorite/get', name: 'app_favorite_get', methods: 'get')]
     public function favoriteGet(EntityManagerInterface $em): Response
     {
         // can be true, depends on the user
-        $favorites = $em->getRepository(Favorite::class)->findBy(array(),array('likes'=>'DESC'),4);
+        $favorites = $em->getRepository(Favorite::class)->findBy(array(),array('likes'=>'DESC'));
         $response = [];
         foreach ($favorites as $favorite){
 
             $favoriteLikes = $favorite->getLikes();
-            $product = $em->getRepository(Product::class)->findOneBy(['id'=>$favorite->getProduct()]);
-            $productName = $product->getName();
-            $data['likes'] = $favoriteLikes;
-            $data['product'] = $productName;
-            $data['picture'] = $product->getImage();
-            $response[] = $data;
+            if ($favoriteLikes!=0){
+                $product = $em->getRepository(Product::class)->findOneBy(['id'=>$favorite->getProduct()]);
+                $productName = $product->getName();
+                $data['likes'] = $favoriteLikes;
+                $data['product'] = $productName;
+                $data['picture'] = $product->getImage();
+                $response[] = $data;
+            }
+
 
         }
-        return $this->json($response);
+        return $this->json($response, Response::HTTP_OK);
 
     }
     #[Route('/api/favorite/my', name: 'app_favorite_my',methods: 'get')]
@@ -90,6 +93,6 @@ class FavoriteController extends AbstractController
             $data[] = $array;
         }
 
-        return $this->json($data);
+        return $this->json($data, Response::HTTP_OK);
     }
 }

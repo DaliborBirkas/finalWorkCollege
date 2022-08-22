@@ -77,11 +77,9 @@ class OrderService extends AbstractController
                         $discountPrice = $product->getDiscountPrice();
                         $regularPrice = $product->getPrice();
                         if ($quantityOrder > $quantityDatabase){
-                            // TO DO
+
                         }else{
-                            $product->setBalance($quantityDatabase-$quantityOrder);
-                            $this->em->persist($product);
-                            $this->em->flush();
+
                             if ($discountPrice!=0.00){
                                 $total = $total + ($discountPrice*$quantityOrder);
                             }
@@ -95,7 +93,7 @@ class OrderService extends AbstractController
 
                     $total = round( $total - ($total*$userRabat),2);
 
-                    if ($total>0){
+                    if ($total>0 && $total<100000){
 
                     $order = new Order();
 
@@ -126,13 +124,26 @@ class OrderService extends AbstractController
 
                     foreach ($products as $value ){
                         $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$value->id]);
+                        $productName = $product->getName();
                         $quantityDatabase = $product->getBalance();
                         $quantityOrder = $value->balance;
                         $discountPrice = $product->getDiscountPrice();
                         $regularPrice = $product->getPrice();
                         if ($quantityOrder > $quantityDatabase){
-                            // TO DO
+                            $email1 = (new Email())
+                                ->to($user->getEmail())
+                                ->subject('Proizvod - Kolicina')
+                                ->html('<p>Postovani '.$userName.',<br> '.$productName.' je izbacen iz porudzbine jer trenutna dostupna kolicina je '.$quantityDatabase.',
+                                a vi ste hteli da porucite '.$quantityOrder.'. Ukoliko zelite da porucite proizvod napravite narudzbu sa dostupnom kolicinom.<br>
+                                Kozna galenterija<br>
+                                Dalibor<br>
+                                Developer & Customer support<br>
+                                +385646646464664</p>');
+                            $this->mailerService->send($email1);
                         }else{
+                            $product->setBalance($quantityDatabase-$quantityOrder);
+                            $this->em->persist($product);
+                            $this->em->flush();
                             $orderedProduct = new OrderedProducts();
                             $orderedProduct->setOrderNumber($order);
                             $orderedProduct->setProduct($product);
@@ -218,6 +229,18 @@ class OrderService extends AbstractController
 
                     return 'Success';
                     }
+                    else{
+                        $message = (new Email())
+                            ->to($user->getEmail())
+                            ->subject('Dug')
+                            ->html('<p>Postovani '.$userName.',<br> Vas porudzbina sa popustom iznosi '.$total.' RSD<br>
+                            Nedozvoljen minus bi iznosio '.$total.' RSD<br>
+                            Maksimalan nedozvoljen minus je 100000.00 RSD
+                            Molim vas kontaktirajte admina ukoliko vasa prva porudzbina prelazi ne dozvoljen minus </p>');
+
+                        $this->mailerService->send($message);
+                        return 'Pay debt';
+                    }
                 }
                 else{
                     $amount = $debt->getAmount();
@@ -238,9 +261,6 @@ class OrderService extends AbstractController
                         if ($quantityOrder > $quantityDatabase){
                             // TO DO
                         }else{
-                            $product->setBalance($quantityDatabase-$quantityOrder);
-                            $this->em->persist($product);
-                            $this->em->flush();
                             if ($discountPrice!=0.00){
                                 $total = $total + ($discountPrice*$quantityOrder);
                             }
@@ -259,13 +279,10 @@ class OrderService extends AbstractController
 
                         $message = (new Email())
                             ->to($user->getEmail())
-                            //->cc('cc@example.com')
-                            //->bcc('bcc@example.com')
-                            //->replyTo('fabien@example.com')
-                            //->priority(Email::PRIORITY_HIGH)
                             ->subject('Dug')
-                            ->html('<p>Postovani '.$userName.',<br> Vas dug iznosi '.$amount.', sa vasom porudzbinom bi presli u nedozvoljen minus.<br>
-                            Nedozvoljen minus bi iznosio '.$amountNew.'<br>
+                            ->html('<p>Postovani '.$userName.',<br> Vas dug iznosi '.$amount.' RSD, sa vasom porudzbinom bi presli u nedozvoljen minus.<br>
+                            Nedozvoljen minus bi iznosio '.$amountNew.' RSD<br>
+                            Maksimalan nedozvolje minus je 100000.00 RSD
                             Molim vas prvo platite prethodne poruzbine</p>');
 
                         $this->mailerService->send($message);
@@ -304,13 +321,26 @@ class OrderService extends AbstractController
 
                         foreach ($products as $value ){
                             $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$value->id]);
+                            $productName = $product->getName();
                             $quantityDatabase = $product->getBalance();
                             $quantityOrder = $value->balance;
                             $discountPrice = $product->getDiscountPrice();
                             $regularPrice = $product->getPrice();
                             if ($quantityOrder > $quantityDatabase){
-                                // TO DO
+                                $email1 = (new Email())
+                                    ->to($user->getEmail())
+                                    ->subject('Proizvod - Kolicina')
+                                    ->html('<p>Postovani '.$userName.',<br> '.$productName.' je izbacen iz porudzbine jer trenutna dostupna kolicina je '.$quantityDatabase.',
+                                a vi ste hteli da porucite '.$quantityOrder.'. Ukoliko zelite da porucite proizvod napravite novu narudzbu sa dostupnom kolicinom.<br>
+                                Kozna galenterija<br>
+                                Dalibor<br>
+                                Developer & Customer support<br>
+                                +385646646464664</p>');
+                                $this->mailerService->send($email1);
                             }else{
+                                $product->setBalance($quantityDatabase-$quantityOrder);
+                                $this->em->persist($product);
+                                $this->em->flush();
                                 $orderedProduct = new OrderedProducts();
                                 $orderedProduct->setOrderNumber($order);
                                 $orderedProduct->setProduct($product);
@@ -427,7 +457,7 @@ class OrderService extends AbstractController
                 ->subject('Verifikacija')
                 ->html("
                     <h2>Postovani  $userName</h2>
-                    <h4> Porudzbina</h4>   
+                    <p>Ne uspela porudzbina</p>
                     <p>Ne mozete da kreirate porudzbinu jer vasa email adresa nije verifikovana. Molim vas odradite verifikaciju.</p>
                     <br>
                     <h4>Kozna galenterija</h4>
