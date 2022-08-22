@@ -255,7 +255,7 @@ class OrderService extends AbstractController
                     $total = round( $total - ($total*$userRabat),2);
                     $amountNew = $amount+ $total;
 
-                    if ($amountNew>60000){
+                    if ($amountNew>100000){
 
                         $message = (new Email())
                             ->to($user->getEmail())

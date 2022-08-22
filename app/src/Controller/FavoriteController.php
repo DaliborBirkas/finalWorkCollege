@@ -76,7 +76,7 @@ class FavoriteController extends AbstractController
     public function favoriteMy(Request $request,EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
-        $favoriteProduct = $em->getRepository(FavoriteProduct::class)->findBy(['user'=>$user,'liked'=>1]);
+        $favoriteProduct = $em->getRepository(FavoriteProduct::class)->findBy(['user'=>$user,'liked'=>1],array('name'=>'ASC'),4);
         $data = [];
         foreach ($favoriteProduct as $value){
             $product = $value->getProduct();

@@ -41,7 +41,7 @@ class ProductController extends AbstractController
         $info = json_decode($request->getContent());
         $category = $info->id;
 
-        $products =$this->em->getRepository(Product::class)->findBy(['category'=>$category],array('name'=>'ASC'),4);
+        $products =$this->em->getRepository(Product::class)->findBy(['category'=>$category]);
 
         $data = [];
 
