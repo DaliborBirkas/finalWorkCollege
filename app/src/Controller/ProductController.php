@@ -30,17 +30,18 @@ class ProductController extends AbstractController
             $categoryArray['description'] = $product->getDescription();
             $categoryArray['price'] = $product->getPrice();
             $categoryArray['image'] = $product->getImage();
+            $categoryArray['discountPrice'] = $product->getDiscountPrice();
             $data[] = $categoryArray;
         }
         return $this->json($data);
     }
-    #[Route('/product/findByCategory', name: 'app_product_find_by_category',methods: 'GET')]
+    #[Route('/product/findByCategory', name: 'app_product_find_by_category',methods: 'post')]
     public function findByCategory(Request $request): Response
     {
         $info = json_decode($request->getContent());
-        $category = $info->category;
+        $category = $info->id;
 
-        $products =$this->em->getRepository(Product::class)->findBy(['category'=>$category]);
+        $products =$this->em->getRepository(Product::class)->findBy(['category'=>$category],array('name'=>'ASC'),4);
 
         $data = [];
 

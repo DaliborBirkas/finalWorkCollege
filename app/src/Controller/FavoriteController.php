@@ -39,39 +39,10 @@ class FavoriteController extends AbstractController
         $this->tokenStorageInterface = $tokenStorageInterface;
     }
 
-    /**
-     * @throws \Twilio\Exceptions\TwilioException
-     * @throws \Twilio\Exceptions\ConfigurationException
-     */
     #[Route('/api/favorite', name: 'app_favorite',methods: ['get','post'])]
     public function favorite(Request $request,FavoriteService $favoriteService): JsonResponse
     {
-        // can be true, depends on the user
-       // $favoriteService->setLikes($request);
-//        $authorizationHeader = $request->headers->get('Authorization');
-//        $authorizationHeaderArray = explode(' ', $authorizationHeader);
-//        $token = $authorizationHeaderArray[1] ?? null;
-//        $tokenParts = explode(".", $token);
-//        $tokenHeader = base64_decode($tokenParts[0]);
-//        $tokenPayload = base64_decode($tokenParts[1]);
-//        $jwtHeader = json_decode($tokenHeader);
-//        $jwtPayload = json_decode($tokenPayload);
-        //$jwtToken = $this->JWTEncoder->decode($token);
-        $sid = 'AC2a4a1de0e344520c50dd5cc1df681ff4';
-        $token = '52a0dcd7e06e9432ff0a88645f4c24c9';
-        $client = new Client($sid, $token);
-        //$m = new SmsMessage()
-// Use the client to do fun stuff like send text messages!
-        $client->messages->create(
-        // the number you'd like to send the message to
-            '+381616967616',
-            [
-                // A Twilio phone number you purchased at twilio.com/console
-                'from' => '+14054517789',
-                // the body of the text message you'd like to send
-                'body' => 'Hakovani ste'
-            ]
-        );
+
 
         $user = $this->getUser();
 
@@ -101,12 +72,24 @@ class FavoriteController extends AbstractController
         return $this->json($response);
 
     }
-    #[Route('/api/favorite/my', name: 'app_favorite_my')]
+    #[Route('/api/favorite/my', name: 'app_favorite_my',methods: 'get')]
     public function favoriteMy(Request $request,EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
         $favoriteProduct = $em->getRepository(FavoriteProduct::class)->findBy(['user'=>$user,'liked'=>1]);
+        $data = [];
+        foreach ($favoriteProduct as $value){
+            $product = $value->getProduct();
+            $array = [];
+            $array['name'] = $product->getName();
+            $array['category'] = $product->getCategory()->getName();
+            $array['description'] = $product->getDescription();
+            $array['price'] = $product->getPrice();
+            $array['image'] = $product->getImage();
+            $array['discountPrice'] = $product->getDiscountPrice();
+            $data[] = $array;
+        }
 
-        return $this->json($favoriteProduct);
+        return $this->json($data);
     }
 }

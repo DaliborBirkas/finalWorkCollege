@@ -9,6 +9,7 @@ use App\Entity\User;
 use Browser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -18,11 +19,9 @@ class StatisticsController extends AbstractController
 
     }
     #[Route('/api/user/statistics', name: 'app_statistics',methods: 'GET')]
-    public function statistics(): Response
+    public function statistics(Request $request): Response
     {
-      $email = "dbirkas3@gmail.com";
-      $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
-       // $user = $this->getUser();
+        $user = $this->getUser();
       $orders = $this->em->getRepository(Order::class)->findBy(['userId'=>$user]);
       $dataAll = [];
 
@@ -49,20 +48,19 @@ class StatisticsController extends AbstractController
       return $this->json($dataAll,Response::HTTP_OK);
     }
 
-    #[Route('/api/user/statistics/order', name: 'app_statistics_order',methods: 'GET')]
-    public function statisticsOrder(): Response
+    #[Route('/api/user/statistics/order', name: 'app_statistics_order',methods: 'post')]
+    public function statisticsOrder(Request $request): Response
     {
-        $id = 1;
+        $dataJson = json_decode($request->getContent());
+        $id = $dataJson->orderNumber;
         date_default_timezone_set("Europe/Belgrade");
-
-//        $browser = new Browser();
-//        dump($browser->isAol(), $browser->getPlatform(),$browser->getVersion(),$browser->getUserAgent(),$browser->isMobile(),$browser->isTablet());
         $orders = $this->em->getRepository(OrderedProducts::class)->findBy(['orderNumber'=>$id]);
         $dataAll = [];
         foreach ($orders as $order){
 
             $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$order->getProduct()]);
             $productName = $product->getName();
+
             $data=[
                 'productName'=>$productName,
                 'priceForOne'=>$order->getPrice(),
