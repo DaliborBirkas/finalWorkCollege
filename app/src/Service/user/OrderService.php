@@ -74,6 +74,7 @@ class OrderService extends AbstractController
                         $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$value->id]);
                         $quantityDatabase = $product->getBalance();
                         $quantityOrder = $value->balance;
+                        $quantityOrder =1;
                         $discountPrice = $product->getDiscountPrice();
                         $regularPrice = $product->getPrice();
                         if ($quantityOrder > $quantityDatabase){
@@ -127,6 +128,7 @@ class OrderService extends AbstractController
                         $productName = $product->getName();
                         $quantityDatabase = $product->getBalance();
                         $quantityOrder = $value->balance;
+                        $quantityOrder = 1;
                         $discountPrice = $product->getDiscountPrice();
                         $regularPrice = $product->getPrice();
                         if ($quantityOrder > $quantityDatabase){
@@ -211,7 +213,13 @@ class OrderService extends AbstractController
                         ->htmlTemplate('order/email.html.twig')
                         ->context([
                             'name'=>$userName,
-                            'idOrder'=>$idOrder
+                            'idOrder'=>$idOrder,
+                            'orderDate'=>$currentDateForPdf,
+                            'rabat'=>$rabatPdf,
+                            'totalWithoutRabat'=>$totalWithoutRabat,
+                            'total'=>$total,
+                            'products'=>$pdfArray,
+                            'note'=>$orderNote
 //                            'name'=>$name,
 //                            'emailAddress'=>$to,
 //                            'expires'=>$expires
@@ -256,6 +264,7 @@ class OrderService extends AbstractController
                         $product = $this->em->getRepository(Product::class)->findOneBy(['id'=>$value->id]);
                         $quantityDatabase = $product->getBalance();
                         $quantityOrder = $value->balance;
+                        $quantityOrder = 1;
                         $discountPrice = $product->getDiscountPrice();
                         $regularPrice = $product->getPrice();
                         if ($quantityOrder > $quantityDatabase){
@@ -280,10 +289,10 @@ class OrderService extends AbstractController
                         $message = (new Email())
                             ->to($user->getEmail())
                             ->subject('Dug')
-                            ->html('<p>Postovani '.$userName.',<br> Vas dug iznosi '.$amount.' RSD, sa vasom porudzbinom bi presli u nedozvoljen minus.<br>
-                            Nedozvoljen minus bi iznosio '.$amountNew.' RSD<br>
-                            Maksimalan nedozvolje minus je 100000.00 RSD
-                            Molim vas prvo platite prethodne poruzbine</p>');
+                            ->html('<p>Poštovani '.$userName.',<br> Vaš dug iznosi '.$amount.' RSD, sa vašom porudžbinom bi prešli u nedozvoljen minus.<br>
+                            Nedozvoljen minus bi iznosio '.$amountNew.' RSD.<br>
+                            Maksimalan nedozvoljen minus je 100000.00 RSD.
+                            Molim vas prvo platite prethodne poružbine.</p>');
 
                         $this->mailerService->send($message);
                         return 'Pay debt';
@@ -315,7 +324,7 @@ class OrderService extends AbstractController
                                 // A Twilio phone number you purchased at twilio.com/console
                                 'from' => '+14054517789',
                                 // the body of the text message you'd like to send
-                                'body' => 'Postovani, vasa porudzbina je evidentirana. Broj porudzbine je '.$idOrder.'. Vasa kozna galenterija. '
+                                'body' => 'Poštovani, vaša porudžbina je evidentirana. Broj porudžbine je '.$idOrder.'.Vaša kožna galenterija. '
                             ]
                         );
 
@@ -324,6 +333,7 @@ class OrderService extends AbstractController
                             $productName = $product->getName();
                             $quantityDatabase = $product->getBalance();
                             $quantityOrder = $value->balance;
+                            $quantityOrder = 1;
                             $discountPrice = $product->getDiscountPrice();
                             $regularPrice = $product->getPrice();
                             if ($quantityOrder > $quantityDatabase){
@@ -386,7 +396,8 @@ class OrderService extends AbstractController
                             'totalWithoutRabat'=>$totalWithoutRabat,
                             'total'=>$total,
                             'products'=>$pdfArray,
-                            'note'=>$orderNote
+                            'note'=>$orderNote,
+
 
                         ]);
                         $dompdf->loadHtml($html);
@@ -404,11 +415,17 @@ class OrderService extends AbstractController
                         $email = (new TemplatedEmail())
                             ->to($user->getEmail())
 
-                            ->subject('Vasa narudzba')
+                            ->subject('Vaša narudžba')
                             ->htmlTemplate('order/email.html.twig')
                             ->context([
                                 'name'=>$userName,
-                                'idOrder'=>$idOrder
+                                'idOrder'=>$idOrder,
+                                'orderDate'=>$currentDateForPdf,
+                                'rabat'=>$rabatPdf,
+                                'totalWithoutRabat'=>$totalWithoutRabat,
+                                'total'=>$total,
+                                'products'=>$pdfArray,
+                                'note'=>$orderNote
 //                            'name'=>$name,
 //                            'emailAddress'=>$to,
 //                            'expires'=>$expires
@@ -438,11 +455,11 @@ class OrderService extends AbstractController
                     ->to($user->getEmail())
                     ->subject('Verifikacija')
                     ->html("
-                    <h2>Postovani  $userName</h2>
-                    <h4> Porudzbina</h4>   
-                    <p>Ne mozete da kreirate porudzbinu jer vas admin nije jos verifikovao. Molim vas sacekajte</p>
+                    <h2>Poštovani  $userName</h2>
+                    <h4> Porudžbina</h4>   
+                    <p>Ne možete da kreirate porudžbinu jer vas administrator nije još verifikovao. Molim vas sačekajte</p>
                     <br>
-                    <h4>Kozna galenterija</h4>
+                    <h4>Kožna galenterija</h4>
                     <h4>Dalibor</h4>
                     <h4>+38564655456</h4>                
                     ");
@@ -456,11 +473,11 @@ class OrderService extends AbstractController
                 ->to($user->getEmail())
                 ->subject('Verifikacija')
                 ->html("
-                    <h2>Postovani  $userName</h2>
-                    <p>Ne uspela porudzbina</p>
-                    <p>Ne mozete da kreirate porudzbinu jer vasa email adresa nije verifikovana. Molim vas odradite verifikaciju.</p>
+                    <h2>Poštovani  $userName</h2>
+                    <p>Neuspela porudžbina</p>
+                    <p>Ne možete da kreirate porudžbinu jer vaša email adresa nije verifikovana. Molim vas odradite verifikaciju.</p>
                     <br>
-                    <h4>Kozna galenterija</h4>
+                    <h4>Kožna galenterija</h4>
                     <h4>Dalibor</h4>
                     <h4>+38564655456</h4>                
                     ");

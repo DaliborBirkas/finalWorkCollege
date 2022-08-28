@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Entity\OrderedProducts;
 use App\Entity\User;
 use App\Service\admin\SetRabatService;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,9 +29,8 @@ class AdminController extends AbstractController
     public function verifyUser(Request $request, VerifyUserService $verifyUserService):JsonResponse
     {
         $data = json_decode($request->getContent());
-       // $id = $data->id;
-        $id =1;
-        $verifyUserService->verifyUser($id);
+        $email = $data->email;
+        $verifyUserService->verifyUser($email);
         return $this->json('Success',RESPONSE::HTTP_OK);
     }
     #[Route('/api/admin/category/add', name: 'app_admin_category_add', methods: 'post')]
@@ -78,13 +78,31 @@ class AdminController extends AbstractController
     public function verified(Request $request):JsonResponse
     {
         $data = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true,'is_verified'=>true]);
-        return $this->json($data,RESPONSE::HTTP_OK);
+        $dataAll = [];
+        foreach ($data as $row){
+            $array=[
+                'email'=>$row->getEmail(),
+                'firstName'=>$row->getName(),
+                'lastName'=>$row->getSurname(),
+                'companyName'=>$row->getCompanyName(),
+                'address'=>$row->getAddress()
+            ];
+            $dataAll[] = $array;
+        }
+        return $this->json($dataAll,RESPONSE::HTTP_OK);
     }
     //USERS FULL VERIFIED
     #[Route('/api/admin/users/emailVerifiedAdminNot', name: 'app_admin_users_emailVerifiedAdminNot')]
     public function adminVerification(Request $request):JsonResponse
     {
         $data = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true,'is_verified'=>false]);
+        return $this->json($data,RESPONSE::HTTP_OK);
+    }
+    //USERS FULL VERIFIED
+    #[Route('/api/admin/users/adminDidNotVerify', name: 'app_admin_users_adminDidNotVerify',methods: 'get')]
+    public function adminDidNotVerfiy(Request $request):JsonResponse
+    {
+        $data = $this->em->getRepository(User::class)->findBy(['is_verified'=>false]);
         return $this->json($data,RESPONSE::HTTP_OK);
     }
 
@@ -136,12 +154,45 @@ class AdminController extends AbstractController
         $data = $this->em->getRepository(Order::class)->findBy(['userId'=>1]);
         return $this->json($data,RESPONSE::HTTP_OK);
     }
-    #[Route('/api/admin/user/rabat', name: 'app_admin_user_orders')]
+    #[Route('/api/admin/user/rabat', name: 'app_admin_user_orders',methods: 'post')]
     public function userRabat(Request $request, SetRabatService $rabatService):JsonResponse
     {
         $data = json_decode($request->getContent());
         $user = $this->getUser();
-        $rabatService->setRabat($data,$user);
+        $rabatService->setRabat($data);
         return $this->json('Success',Response::HTTP_OK);
+    }
+    #[Route('/api/admin/orders/date', name: 'app_admin_user_orders_bydate')]
+    public function ordersByDate(Request $request):JsonResponse
+    {
+         $info = json_decode($request->getContent());
+        $infoDate = $info->date;
+
+        $date = new DateTime($infoDate);
+
+        $data = $this->em->getRepository(Order::class)->findBy(['orderDate'=>$date]);
+        $dataAll = [];
+        foreach ($data as $order){
+            $paid = 'ne';
+            $sent = 'ne';
+
+            if ($order->isPaid()){
+                $paid = 'da';
+            }
+            if ($order->isSent()){
+                $sent = 'da';
+            }
+
+            $array = [
+                'orderNumber'=>$order->getId(),
+                'orderNote'=>$order->getOrderNote(),
+                'sent'=>$sent,
+                'totalPrice'=>$order->getPrice(),
+                'paid'=>$paid
+            ];
+            $dataAll[]= $array;
+        }
+
+        return $this->json($dataAll,RESPONSE::HTTP_OK);
     }
 }

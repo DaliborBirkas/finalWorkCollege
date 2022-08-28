@@ -13,9 +13,9 @@ class VerifyUserService extends AbstractController
     public function __construct( private  readonly EntityManagerInterface $em,private readonly MailerInterface $mailer){
 
     }
-    public function verifyUser($id){
+    public function verifyUser($email){
 
-        $user = $this->em->getRepository(User::class)->findOneBy(['id'=>$id]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
 
         if ($user){
             $emailUser = $user->getEmail();

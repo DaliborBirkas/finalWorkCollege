@@ -17,7 +17,7 @@ class MailerService extends AbstractController
     public function createEmail($to,$name,$expires){
         $email = (new TemplatedEmail())
             ->to($to)
-            ->subject('Uspesna registracija')
+            ->subject('Uspešna registracija')
             ->htmlTemplate('mail/mail.html.twig')
             ->context([
                 'name'=>$name,

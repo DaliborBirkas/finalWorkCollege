@@ -1,15 +1,57 @@
 <!doctype html>
 <html lang="en">
+<head>
+    <title>
+        Email
+    </title>
+    <style>
+        table, th {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        td {
+            text-align: center;
+            border-bottom: 1px solid black;
+        }
+    </style>
+</head>
 <body>
 <div class="body">
-    <div class="header text-center">
+    <div class="header text-center" align="center">
         <a href="http://localhost:4200/">
             <img src="{{ email.image('@images/koza.jpg') }}" width="400px" height="200px" class="logo" alt="Picture">
         </a>
     </div>
-    <h1>Kozna galenterija</h1>
-    <h3>Postovani {{ name }}</h3>
-    <p>primili smo vasu narudzbu pod brojem {{ idOrder }}</p>
+    <h1 align="center">Kožna galenterija</h1>
+    <h3 align="center">Poštovani {{ name }}</h3>
+    <p align="center">primili smo vašu narudžbu pod brojem {{ idOrder }}</p>
+
+    <p align="center">Dan porudžbine: <strong>{{ orderDate}}</strong> </p>
+    <p align="center">Broj porudžbine: <strong>{{ idOrder}}</strong> </p>
+    <table align="center" style="font-size: 20px">
+        <tr>
+            <th>Proizvod</th>
+            <th>Kategorija</th>
+            <th>Cena izražena u RSD</th>
+            <th>Količina</th>
+        </tr>
+        {% for product in products%}
+            <tr>
+                {% for values in product %}
+                    <td>{{ values }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    <p align="center">Ukupna cena bez popust: <strong>{{ totalWithoutRabat }}</strong> RSD</p>
+    <p align="center">Popust <strong>{{ rabat }} %</strong></p>
+    <p align="center">Ukupna cena sa popustom: <strong>{{ total }}</strong> RSD</p>
+    <p align="center">Napomena: {{ note }}</p>
+    <p align="center">Možete poručivati proizvode sve dok je vaš dug ispod 100000 dinara</p>
+    <h4 align="center">Kožna galenterija</h4>
+    <h4 align="center">Dalibor</h4>
+    <h4 align="center">Customer support</h4>
+    <h4 align="center">+38564655456</h4>
 </div>
 </body>
 </html>

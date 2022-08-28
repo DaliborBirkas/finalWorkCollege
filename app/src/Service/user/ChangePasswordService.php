@@ -16,16 +16,17 @@ class ChangePasswordService
 
     }
     public function updatePassword($data,$user){
-        //$email = $data->email;
-        $password = $data->password;
+
+        $password = $data->newPassword;
         $repeatedPassword = $data->repeatedPassword;
         $email = $user->getEmail();
-        $userName = $user->getName();
-//        $userName = "janko";
-//        $password = "test45";
-//        $repeatedPassword = "test45";
-//        $email = "dbirkas3@gmail.com";
+
+        $oldPw = $data->password;
         $user = $this->em->getRepository(User::class)->findOneBy(['email'=>$email]);
+        $userName = $user->getName();
+        if (!password_verify($oldPw,$user->getPassword())){
+            return 'Aborted';
+        }
         if ($password !== $repeatedPassword){
             return 'Aborted';
         }

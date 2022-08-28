@@ -15,22 +15,27 @@
 </head>
 <body>
 <div class="body">
-    <h1 align="center">Kozna galenterija</h1>
+    <h1 align="center">Kožna galenterija</h1>
     <h3 align="center">Izdvajamo TOP proizvode sa cenom na popustu</h3>
     <table align="center" style="font-size: 25px">
         <tr>
+            <th</th>
             <th>Proizvod</th>
             <th>Opis</th>
             <th>Stara cena</th>
             <th>Nova cena</th>
-            <th>Dostupna kolicina</th>
+            <th>Dostupna količina</th>
             <th>Kategorija</th>
         </tr>
         {% for product in products %}
             <tr>
-                {% for values in product%}
-                    <td>{{ values }}</td>
-                {% endfor %}
+                <td><img src="{{ email.image('@images/'~product['image'])}}" width="100px" height="100px" class="logo" alt="Picture"></td>
+                <td>{{ product['name'] }}</td>
+                <td>{{ product['description'] }}</td>
+                <td>{{ product['oldPrice'] }}</td>
+                <td>{{ product['newPrice'] }}</td>
+                <td>{{ product['balance'] }}</td>
+                <td>{{ product['categoryName'] }}</td>
             </tr>
         {% endfor %}
     </table>

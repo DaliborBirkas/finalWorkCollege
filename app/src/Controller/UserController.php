@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Entity\Random;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -55,12 +56,12 @@ class UserController extends AbstractController
             ->to($request->attributes->get('email'))
             ->subject('Verifikacija')
             ->html("
-                    <h2>Postovani $userName </h2><br>
-                    <h4>Uspesno ste verifikovali vas nalog</h4>   
-                     
+                    <h2>Poštovani $userName </h2><br>
+                    <h4>Uspešno ste verifikovali vaš nalog</h4>   
+                     <h4>Sada je potrebno da vas verfikuje administrator kako bi ste mogli da poručujete proizvode</h4>
                     <br>
 
-                    <h4>Kozna galenterija</h4>
+                    <h4>Kožna galenterija</h4>
                     <h4>Dalibor</h4>
                     <h4>+38564655456</h4>                
                     ");
@@ -73,12 +74,12 @@ class UserController extends AbstractController
             ->to($request->attributes->get('email'))
             ->subject('Verifikacija')
             ->html("
-                    <h2>Postovani $userName </h2><br>
-                    <h4>Vas nalog je vec verifikovan</h4>   
+                    <h2>Poštovani $userName </h2><br>
+                    <h4>Vaš nalog je već verifikovan</h4>   
                      
                     <br>
 
-                    <h4>Kozna galenterija</h4>
+                    <h4>Kožna galenterija</h4>
                     <h4>Dalibor</h4>
                     <h4>+38564655456</h4>                
                     ");
@@ -90,13 +91,13 @@ class UserController extends AbstractController
             ->to($request->attributes->get('email'))
             ->subject('Verifikacija')
             ->html("
-                    <h2>Postovani $userName </h2><br>
-                    <h4>Doslo je do greske, pokusajte opet da verifikujete nalog.</h4> 
-                    <h5>Mozda je vreme predlozeno za verifikaciju isteklo</h5>  
+                    <h2>Poštovani $userName </h2><br>
+                    <h4>Došlo je do greške, pokušajte opet da verifikujete nalog.</h4> 
+                    <h5>Možda je vreme predloženo za verifikaciju isteklo</h5>  
                      
                     <br>
 
-                    <h4>Kozna galenterija</h4>
+                    <h4>Kožna galenterija</h4>
                     <h4>Dalibor</h4>
                     <h4>+38564655456</h4>                
                     ");
@@ -146,6 +147,34 @@ class UserController extends AbstractController
         dd($userRepository->emails());
         return $this->json($message,Response::HTTP_OK);
 
+    }
+    #[Route('/api/user/order/id', name: 'app_user_order_id',methods: 'post')]
+    public function orderId(Request $request)
+    {
+        $data = json_decode($request->getContent());
+        $id = $data->orderNumber;
+        $user = $this->getUser();
+        $order = $this->em->getRepository(Order::class)->findOneBy(['id'=>$id,'userId'=>$user]);
+
+            $paid = 'ne';
+            $sent = 'ne';
+
+            if ($order->isPaid()){
+                $paid = 'da';
+            }
+            if ($order->isSent()){
+                $sent = 'da';
+            }
+
+            $data = [
+                'orderNumber'=>$order->getId(),
+                'orderNote'=>$order->getOrderNote(),
+                'sent'=>$sent,
+                'totalPrice'=>$order->getPrice(),
+                'paid'=>$paid
+            ];
+
+        return $this->json($data,Response::HTTP_OK);
     }
 
 

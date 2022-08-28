@@ -2,8 +2,10 @@
 
 namespace App\Command;
 
+use App\Entity\FavoriteProduct;
 use App\Entity\Logs;
 use App\Entity\User;
+use App\Repository\FavoriteProductRepository;
 use App\Repository\LogsRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,11 +25,13 @@ class UserExpiredCommand extends Command
 {
     private $userRepository;
     private $logsRepository;
+    private$favoriteProductRepository;
     public function __construct(private  readonly EntityManagerInterface $em,UserRepository $userRepository,
-                                LogsRepository $logsRepository, string $name = null)
+                                LogsRepository $logsRepository, FavoriteProductRepository $favoriteProductRepository,string $name = null)
     {
         $this->userRepository = $userRepository;
         $this->logsRepository = $logsRepository;
+        $this->favoriteProductRepository = $favoriteProductRepository;
         parent::__construct($name);
     }
 
@@ -52,8 +56,13 @@ class UserExpiredCommand extends Command
             foreach ($users as $user){
                 if ($user->getVerificationExpire()<$timeInt){
                     $logs = $this->em->getRepository(Logs::class)->findBy(['user'=>$user]);
+                    $favorites = $this->em->getRepository(FavoriteProduct::class)->findBy(['user'=>$user]);
                     foreach ($logs as $log){
                         $this->logsRepository->remove($log);
+                        $this->em->flush();
+                    }
+                    foreach ($favorites as $favorite){
+                        $this->favoriteProductRepository->remove($favorite);
                         $this->em->flush();
                     }
                     $count = $this->userRepository->deleteExpired();

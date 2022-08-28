@@ -1,45 +1,56 @@
 <!doctype html>
-<html lang="en">
+<html lang="sr">
 <head>
   <title>
-    Predracun
+    Predračun
   </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <style>
-    table, th {
-      border: 1px solid black;
+   *{ font-family: DejaVu Sans;
+    font-size: 13px}
+    table{
+      border-top: 1px solid black;
+      border-left: 1px solid black;
+      border-right: 1px solid black;
       border-collapse: collapse;
+    }
+    th{
+      border: 1px solid black;
     }
     td {
       text-align: center;
-      border-bottom: 1px solid black;
+      border-left: 1px solid black;
+      border-right: 1px solid black;
     }
 
   </style>
 </head>
 <body>
 <div class="body">
-  <h1 align="left">Kozna galenterija D.O.O.</h1>
-  <h4 align="left">Blaska rajica 15, 24000 Subotica, Srbija</h4>
-  <h4 align="left">Tel: 024/555-666 </h4>
-  <h4 align="left">PIB: 10002000</h4>
-  <h4 align="left">Ziro racun: 170-565656565456-22</h4>
+  <h4 align="left">SZR "SNiS"</h4>
+  <h4 align="left">Palić, Horgoški Put 59, Tel: 063 7007-457</h4>
+  <h4 align="left">Matični broj radnje: 55877084 </h4>
+  <h4 align="left">Matični broj: 2203976363022</h4>
+  <h4 align="left">Registarski broj: 236-2203976363022</h4>
+  <h4 align="left">Šifra delatnosti: 19200, PIB: 102873191</h4>
+  <h3 align="left">325-9500700027032-94 OTP Banka</h3>
   <hr>
-  <p align="right">Predracun napravljen dana:  {{ date }}</p>
+  <p align="right">Predračun napravljen dana:  {{ date }}</p>
   <p ><strong>PODACI O KUPCU</strong><br><br> {{ name }} {{ surname }}<br>
     {{ company }}<br>
   {{ address }}<br>
   {{ cityPostal }} {{ city }}<br>
    Srbija <br>
     PIB:{{ pib}} </p>
-  <h3 align="center">PREDRACUN BROJ: {{ idOrder }}</h3>
-  <p>Dan porudzbine: <strong>{{ orderDate}}</strong> </p>
-  <p>Broj porudzbine: <strong>{{ idOrder}}</strong> </p>
+  <h3 align="center">PREDRAČUN BROJ: {{ idOrder }}</h3>
+  <p>Dan porudžbine: <strong>{{ orderDate}}</strong> </p>
+  <p>Broj porudžbine: <strong>{{ idOrder}}</strong> </p>
   <table align="center" style="font-size: 20px">
     <tr>
       <th>Proizvod</th>
       <th>Kategorija</th>
-      <th>Cena izrazena u RSD</th>
-      <th>Kolicina</th>
+      <th>Cena izražena u RSD</th>
+      <th>Količina</th>
     </tr>
     {% for product in products%}
       <tr>
@@ -49,16 +60,15 @@
       </tr>
     {% endfor %}
   </table>
-  <p align="left">Ukupna cena bez popustom: <strong>{{ totalWithoutRabat }}</strong> RSD</p>
+  <p align="left">Ukupna cena bez popusta: <strong>{{ totalWithoutRabat }}</strong> RSD</p>
   <p align="left">Popust <strong>{{ rabat }} %</strong></p>
   <p align="left">Ukupna cena sa popustom: <strong>{{ total }}</strong> RSD</p>
   <p align="left">Napomena: {{ note }}</p>
-  <p align="left">Mozete porucivati proizvode sve dok je vas dug ispod 60000 dinara</p>
+  <p align="left">Možete poručivati proizvode sve dok je vaš dug ispod 100000 dinara.</p>
   <br>
-  <p>Smernice za placanje putem banke/uplatnice:</p>
-  <p>Broj racuna primaoca: 170-565656565456-22</p>
-  <p>Poziv na broj odobronjea: {{ idOrder }}</p>
-  <p>Valuta placanja: RSD</p>
+  <p>Smernice za plaćanje putem banke/uplatnice:</p>
+  <p>Poziv na broj odobrenja: {{ idOrder }}</p>
+  <p>Valuta plaćanja: RSD</p>
 
 </div>
 </body>

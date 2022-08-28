@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Favorite;
 use App\Entity\FavoriteProduct;
+use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\Random;
 use App\Entity\User;
+use DateTime;
 use Doctrine\DBAL\Exception\DatabaseDoesNotExist;
 use Doctrine\ORM\EntityManagerInterface;
 //use http\Client;
@@ -66,7 +68,11 @@ class FavoriteController extends AbstractController
                 $productName = $product->getName();
                 $data['likes'] = $favoriteLikes;
                 $data['product'] = $productName;
+                $data['category'] = $product->getCategory()->getName();
+                $data['description'] = $product->getDescription();
+                $data['price'] = $product->getPrice();
                 $data['picture'] = $product->getImage();
+                $data['discountPrice'] = $product->getDiscountPrice();
                 $response[] = $data;
             }
 
@@ -94,5 +100,15 @@ class FavoriteController extends AbstractController
         }
 
         return $this->json($data, Response::HTTP_OK);
+    }
+    #[Route('/orders/date', name: 'app_admin_user_orders_bydatae')]
+    public function ordersByDate(Request $request):JsonResponse
+    {
+        $info = json_decode($request->getContent());
+        //$id = $info->id;
+        $date = new DateTime('2022-08-23');
+
+        $data = $this->em->getRepository(Order::class)->findBy(['orderDate'=>$date]);
+        return $this->json($data,RESPONSE::HTTP_OK);
     }
 }

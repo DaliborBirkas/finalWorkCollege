@@ -64,6 +64,7 @@ class SendNewsletterCommand extends Command
                 $eachProduct['newPrice'] = $productNewPrice;
                 $eachProduct['balance'] = $productBalance;
                 $eachProduct['categoryName'] = $categortName;
+                $eachProduct['image'] = $product->getImage();
                 $topFiveProducts[] =$eachProduct;
             }
 

@@ -66,6 +66,7 @@ class LastAddedProductCommand extends Command
             $eachProduct['oldPrice'] = $productOldPrice;
             $eachProduct['balance'] = $productBalance;
             $eachProduct['categoryName'] = $categortName;
+            $eachProduct['image'] = $product->getImage();
             $newProducts[] =$eachProduct;
 
         }
