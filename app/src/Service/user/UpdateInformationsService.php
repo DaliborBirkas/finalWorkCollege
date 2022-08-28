@@ -78,7 +78,7 @@ class UpdateInformationsService
 
                 $emailSend = (new TemplatedEmail())
                     ->to($email)
-                    ->subject('Obavestenje - Vasi podaci')
+                    ->subject('Obaveštenje - Vaši podaci')
                     ->htmlTemplate('user/updateInfo.html.twig')
                     ->context([
                         'name'=>$name,
@@ -87,7 +87,7 @@ class UpdateInformationsService
 
                 $emailSendVerification = (new TemplatedEmail())
                     ->to($email)
-                    ->subject('Obavestenje - Uspesna promena podataka')
+                    ->subject('Obaveštenje - Uspešna promena podataka')
                     ->htmlTemplate('mail/emailConfirmation.html.twig')
                     ->context([
                         'name'=>$name,

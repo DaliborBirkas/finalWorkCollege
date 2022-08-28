@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Order;
-use App\Entity\Random;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\user\ChangePasswordService;
@@ -58,7 +57,8 @@ class UserController extends AbstractController
             ->html("
                     <h2>Poštovani $userName </h2><br>
                     <h4>Uspešno ste verifikovali vaš nalog</h4>   
-                     <h4>Sada je potrebno da vas verfikuje administrator kako bi ste mogli da poručujete proizvode</h4>
+                     <h4>Administrator će vas verifikovati u najkraćem mogućem roku ukoliko vas nije verifikovao,<br>
+                     kako bi ste mogli da poručujete proizvode.</h4>
                     <br>
 
                     <h4>Kožna galenterija</h4>

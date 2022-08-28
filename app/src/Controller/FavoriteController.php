@@ -58,7 +58,7 @@ class FavoriteController extends AbstractController
     public function favoriteGet(EntityManagerInterface $em): Response
     {
         // can be true, depends on the user
-        $favorites = $em->getRepository(Favorite::class)->findBy(array(),array('likes'=>'DESC'));
+        $favorites = $em->getRepository(Favorite::class)->findBy(array(),array('likes'=>'DESC'),4);
         $response = [];
         foreach ($favorites as $favorite){
 

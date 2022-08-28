@@ -62,6 +62,7 @@ class AdminController extends AbstractController
     public function emailVerified(Request $request):JsonResponse
     {
         $data = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true]);
+
         return $this->json($data,RESPONSE::HTTP_OK);
     }
 
@@ -96,7 +97,20 @@ class AdminController extends AbstractController
     public function adminVerification(Request $request):JsonResponse
     {
         $data = $this->em->getRepository(User::class)->findBy(['isEmailVerified'=>true,'is_verified'=>false]);
-        return $this->json($data,RESPONSE::HTTP_OK);
+        $dataAll = [];
+        foreach ($data as $row){
+            $array = [
+                'id'=>$row->getId(),
+                'email'=>$row->getEmail(),
+                'firstName'=>$row->getName(),
+                'lastName'=>$row->getSurname(),
+                'phone'=>$row->getPhoneNumber(),
+                'pib'=>$row->getPib(),
+                'companyName'=>$row->getCompanyName()
+            ];
+            $dataAll[]=$array;
+        }
+        return $this->json($dataAll,RESPONSE::HTTP_OK);
     }
     //USERS FULL VERIFIED
     #[Route('/api/admin/users/adminDidNotVerify', name: 'app_admin_users_adminDidNotVerify',methods: 'get')]

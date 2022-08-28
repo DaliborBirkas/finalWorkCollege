@@ -22,7 +22,7 @@ class VerifyUserService extends AbstractController
             $nameUser = $user->getName();
             $pibUser = $user->getPib();
 
-            $email = (new TemplatedEmail())
+            $emaill = (new TemplatedEmail())
                 ->to($emailUser)
                 ->subject('Verifikacija')
                 ->htmlTemplate('admin/verifiedByAdmin.html.twig')
@@ -30,7 +30,7 @@ class VerifyUserService extends AbstractController
                     'name'=>$nameUser,
                     'pib'=>$pibUser,
                 ]);
-            $this->mailer->send($email);
+            $this->mailer->send($emaill);
         }
 
         $user->setIsVerified(true);

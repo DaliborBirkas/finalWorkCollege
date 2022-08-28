@@ -134,7 +134,7 @@ class OrderService extends AbstractController
                         if ($quantityOrder > $quantityDatabase){
                             $email1 = (new Email())
                                 ->to($user->getEmail())
-                                ->subject('Proizvod - Kolicina')
+                                ->subject('Proizvod - Količina')
                                 ->html('<p>Postovani '.$userName.',<br> '.$productName.' je izbacen iz porudzbine jer trenutna dostupna kolicina je '.$quantityDatabase.',
                                 a vi ste hteli da porucite '.$quantityOrder.'. Ukoliko zelite da porucite proizvod napravite narudzbu sa dostupnom kolicinom.<br>
                                 Kozna galenterija<br>
@@ -209,7 +209,7 @@ class OrderService extends AbstractController
                     $email = (new TemplatedEmail())
                         ->to($user->getEmail())
 
-                        ->subject('Vasa narudzba')
+                        ->subject('Vaša narudžba')
                         ->htmlTemplate('order/email.html.twig')
                         ->context([
                             'name'=>$userName,

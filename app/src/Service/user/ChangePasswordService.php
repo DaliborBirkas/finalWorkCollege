@@ -39,7 +39,7 @@ class ChangePasswordService
 
             $email = (new TemplatedEmail())
                 ->to($email)
-                ->subject('Obavestenje - Lozinka')
+                ->subject('Obaveštenje - Lozinka')
                 ->htmlTemplate('user/newPassword.html.twig')
                 ->context([
                     'name'=>$userName,
